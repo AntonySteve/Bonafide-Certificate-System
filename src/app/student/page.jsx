@@ -32,12 +32,10 @@ const BonafideForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleClick = (e) => {
+  const handleClick = (e) =>{
     e.preventDefault();
-    const queryParams = new URLSearchParams(formData).toString();
-    router.push(`/letter?${queryParams}`);
-  };
-  
+    router.push('/letter', {formData})
+  }
   const downloadImage = () => {
     if (letterRef.current) {
       toPng(letterRef.current)
