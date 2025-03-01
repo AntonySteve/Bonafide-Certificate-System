@@ -2,6 +2,8 @@
 
 import { useState, useRef } from "react";
 import { toPng } from "html-to-image";
+import { useSelector } from "react-redux";
+import { setUser } from "@/lib/userSlice";
 
 const BonafideForm = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +18,7 @@ const BonafideForm = () => {
     reason: "",
 
   });
-
+  const user = useSelector((state) => state.user);
   const tutors = ["Tutor A", "Tutor B", "Tutor C", "Tutor D"];
   const yearIncharges = ["Year 1", "Year 2", "Year 3"];
   const yearOption = ["I year", "II year", "III year", "IV year"];
@@ -32,34 +34,15 @@ const BonafideForm = () => {
 
   const generateLetter = () => {
     return `
-PSNA College of Engineering and Technology
-
-From:
-     ${formData.studentName},
-     ${formData.regNo},
-     ${formData.department}/${formData.year}/${formData.section},
-     PSNA College of Engineering and Technology,
-     Dindigul.
-
-To:
-     Head of Department,
-     Computer Science and Engineering,
-     PSNA Collge of Engineering and Technology,
-     Dindigul.
-
-Subject: Request for applying ${formData.reason}
-
-Respected mam,
-
-This is to certify that Mr./Ms. ${formData.studentName} with Registration Number ${formData.regNo} is a bonafide student of our institution. He/She is currently pursuing ${formData.department} under the guidance of ${formData.tutor}. The student is in the academic year ${formData.academicYear}, and the Year Incharge is ${formData.yearIncharge}.
-
-The purpose of applying for this bonafide certificate is: ${formData.reason}.
-
-We certify that the above information is true to the best of our knowledge.
-
-                                                                        Yours faithfully,
-                                                                        ${formData.studentName}`;
+  PSNA College of Engineering and Technology
+  
+  This is to certify that M./Ms. ${formData.studentName} S/o.Leo Das R (Register No: ${formData.regNo}) is a bonafide student of this college, studying in ${formData.year} B.E. Degree in ${formData.department} during the academic year ${formData.academicYear}.
+  
+  This Certificate is issued to him for applying to the ${formData.reason}.
+  
+                                                               HOD-CSE`;
   };
+  
 
   const downloadImage = () => {
     if (letterRef.current) {
@@ -75,6 +58,20 @@ We certify that the above information is true to the best of our knowledge.
         });
     }
   };
+
+  const sendFile = (e) => {
+    e.preventDefault();
+    if(!user)
+    {
+      setError('You need to sign in to send the file');
+      return;
+    }
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white shadow-lg rounded-xl color-black">
@@ -199,6 +196,10 @@ We certify that the above information is true to the best of our knowledge.
           className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full"
         >
           Download as Image
+        </button>
+        <button type="submit" onClick={sendFile}  className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-800 w-full">
+          Send
+          
         </button>
       </form>
 
