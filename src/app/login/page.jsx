@@ -10,6 +10,7 @@ export default function Login() {
     email: '',
     password: ''
   });
+  const tutors = ["tutora@psnacet.edu.in", "tutorb@psnacet.edu.in", "tutorc@psnacet.edu.in", "tutord@psnacet.edu.in"]
   const [error, setError] = useState('');
   const router = useRouter();
   const handleChange = (e) => {
@@ -42,14 +43,15 @@ export default function Login() {
 
       console.log(result);
       dispatch(setUser(result.user));
-      if (result.user) {
+      if (result.user && tutors.includes(result.user.email)) {
+        router.push('/tutor');
+      } else {
         router.push('/student');
       }
 
     } catch (error) {
       console.log(error)
     }
-    // Add your authentication logic here
   };
 
   return (
