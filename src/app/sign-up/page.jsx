@@ -1,8 +1,12 @@
 'use client'
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser } from '@/lib/userSlice';
 
-export default function Login() {
+
+export default function SignUp() {
+  const user = useSelector((state) => state.user);
   const [data, setData] = useState({
     username: '',
     email: '',
@@ -10,7 +14,7 @@ export default function Login() {
   });
   const router = useRouter()
   const [error, setError] = useState('');
-
+  const dispatch = useDispatch(); 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
@@ -22,32 +26,40 @@ export default function Login() {
     router.push('/login');
   }
 
-/*************  ✨ Codeium Command 🌟  *************/
-  /**
-   * Handle the sign-in form submission.
-   * @param {Event} e The form submission event.
-   */
-  const handleSignUp = (e) => {
-    e.preventDefault();
 
-    // Check if the email ends with @psnacet.edu.in
+  const handleSignUp = async (e) => {
+    e.preventDefault();
     if (!data.email.endsWith('@psnacet.edu.in')) {
       setError('Only @psnacet.edu.in emails are allowed.');
       return;
     }
-
+    try {
+      const response = await fetch('/api/signup', {
+        method: 'POST',
+        headers :
+        {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      console.log(result);
+      dispatch(setUser(result.user));
+    } catch (error) {
+      console.log(error)
+    }
+    
+    cons
     setError('');
     console.log('Form submitted', data);
-    // Add your authentication logic here
   };
-/******  dca3eae7-7ac2-41ce-9a78-2a9ee9f2d3b1  *******/
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
-      <form className="bg-white p-8 rounded-2xl shadow-lg max-w-sm w-full">
+      <form className="bg-white p-8 rounded-2xl shadow-lg max-w-sm w-full" onSubmit={handleSignUp}>
         {/* Logo */}
         <div className="flex justify-center mb-6">
-          <img src="/logo.png" alt="Logo" className="w-20 h-20" />
+        <img src="https://www.wemakescholars.com/admin/uploads/providers/dXALXBZDSIJRjYu-lFo5oZXxQRcmrfw9.webp" alt="Logo" className="w-40 h-40" />
         </div>
         <div className="mb-4">
           <label htmlFor="email" className="block mb-2 font-semibold">Username</label>
@@ -96,8 +108,7 @@ export default function Login() {
 
         {/* Sign In Button */}
         <button
-          onClick={handleSignUp}
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 cursor-pointer"
         >
           Sign Up
         </button>
@@ -105,7 +116,7 @@ export default function Login() {
         {/* Sign Up Link */}
         <div className="mt-4 text-center">
           <p>Already have an account?</p>
-          <button className="text-blue-600 hover:underline" onClick={handleClick}>Sign IN</button>
+          <button className="text-blue-600 hover:underline" onClick={handleClick}>Sign in</button>
         </div>
       </form>
     </div>

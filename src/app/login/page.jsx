@@ -1,8 +1,11 @@
 'use client'
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser } from '@/lib/userSlice';
 
 export default function Login() {
+  const dispatch = useDispatch();
   const [data, setData] = useState({
     email: '',
     password: ''
@@ -20,16 +23,32 @@ export default function Login() {
     router.push('/sign-up');
   }
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
 
     if (!data.email.endsWith('@psnacet.edu.in')) {
       setError('Only @psnacet.edu.in emails are allowed.');
       return;
     }
+    try {
+      const response = await fetch('/api/signin', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      const result = await response.json();
 
-    setError('');
-    console.log('Form submitted', data);
+      console.log(result);
+      dispatch(setUser(result.user));
+      if (result.user) {
+        router.push('/student');
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
     // Add your authentication logic here
   };
 
@@ -38,7 +57,7 @@ export default function Login() {
       <form className="bg-white p-8 rounded-2xl shadow-lg max-w-sm w-full">
         {/* Logo */}
         <div className="flex justify-center mb-6">
-          <img src="/logo.png" alt="Logo" className="w-20 h-20" />
+          <img src="https://www.wemakescholars.com/admin/uploads/providers/dXALXBZDSIJRjYu-lFo5oZXxQRcmrfw9.webp" alt="Logo" className="w-40 h-40" />
         </div>
 
         {/* Email Input */}
