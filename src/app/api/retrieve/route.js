@@ -4,7 +4,6 @@ import connectDB from "@/lib/db/mongodb";
 export const GET = async (req) => {
   try {
     await connectDB(); 
-
     const email = await req.json();
     if (!email) {
       return new Response(JSON.stringify({ error: "Email is required" }), {
