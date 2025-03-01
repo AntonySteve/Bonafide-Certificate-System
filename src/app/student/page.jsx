@@ -2,6 +2,8 @@
 
 import { useState, useRef } from "react";
 import { toPng } from "html-to-image";
+import { useSelector } from "react-redux";
+import { setUser } from "@/lib/userSlice";
 
 const BonafideForm = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +18,7 @@ const BonafideForm = () => {
     reason: "",
 
   });
-
+  const user = useSelector((state) => state.user);
   const tutors = ["Tutor A", "Tutor B", "Tutor C", "Tutor D"];
   const yearIncharges = ["Year 1", "Year 2", "Year 3"];
   const yearOption = ["I year", "II year", "III year", "IV year"];
@@ -75,6 +77,20 @@ We certify that the above information is true to the best of our knowledge.
         });
     }
   };
+
+  const sendFile = (e) => {
+    e.preventDefault();
+    if(!user)
+    {
+      setError('You need to sign in to send the file');
+      return;
+    }
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white shadow-lg rounded-xl">
@@ -199,6 +215,10 @@ We certify that the above information is true to the best of our knowledge.
           className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full"
         >
           Download as Image
+        </button>
+        <button type="submit" onClick={sendFile}  className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-800 w-full">
+          Send
+          
         </button>
       </form>
 
