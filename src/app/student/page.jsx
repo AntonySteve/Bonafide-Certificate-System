@@ -40,6 +40,7 @@ const BonafideForm = () => {
   
   This Certificate is issued to him for applying to the ${formData.reason}.
   
+  
                                                                HOD-CSE`;
   };
   
@@ -74,12 +75,12 @@ const BonafideForm = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-8 bg-white shadow-lg rounded-xl color-black">
-      <h2 className="text-3xl font-bold mb-8 text-center">Bonafide Certificate Form</h2>
+    <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl color-black text-black ">
+      <h2 className="text-3xl font-bold color-black mb-8 text-center ">Bonafide Certificate Form</h2>
 
-      <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+      <form onSubmit={(e) => e.preventDefault()} className="space-y-6 font-black">
         <input
-          name="studentName"
+          name="studentName" 
           placeholder="Student Name"
           value={formData.studentName}
           onChange={handleChange}

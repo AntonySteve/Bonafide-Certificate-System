@@ -55,7 +55,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center h-screen bg-gray-100 text-black">
       <form className="bg-white p-8 rounded-2xl shadow-lg max-w-sm w-full" onSubmit={handleSignUp}>
         {/* Logo */}
         <div className="flex justify-center mb-6">
@@ -70,7 +70,7 @@ export default function SignUp() {
             placeholder="Enter your username"
             value={data.username}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded placeholder-gray"
           />
         </div>
 
@@ -85,7 +85,7 @@ export default function SignUp() {
             placeholder="Enter your email"
             value={data.email}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded placeholder-gray"
           />
         </div>
 
@@ -99,7 +99,7 @@ export default function SignUp() {
             placeholder="Enter your password"
             value={data.password}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded placholder-gray"
           />
         </div>
 
