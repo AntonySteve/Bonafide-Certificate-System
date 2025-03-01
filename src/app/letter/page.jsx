@@ -1,10 +1,11 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-
+import { useRef } from "react";
+import { toPng } from "html-to-image";
 const BonafideLetter = () => {
   const searchParams = useSearchParams();
-
+   const letterRef = useRef(null);
   const formData = {
     studentName: searchParams.get("studentName"),
     regNo: searchParams.get("regNo"),
@@ -13,6 +14,21 @@ const BonafideLetter = () => {
     academicYear: searchParams.get("academicYear"),
     reason: searchParams.get("reason"),
   };
+
+    const downloadImage = () => {
+      if (letterRef.current) {
+        toPng(letterRef.current)
+          .then((dataUrl) => {
+            const link = document.createElement("a");
+            link.href = dataUrl;
+            link.download = "bonafide-certificate.png";
+            link.click();
+          })
+          .catch((err) => {
+            console.error("Image generation failed:", err);
+          });
+      }
+    };
 
   return (
     <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-xl text-black">
@@ -33,6 +49,13 @@ const BonafideLetter = () => {
       </p>
 
       <p className="mt-6 text-right font-bold text-black">HOD-{formData.department}</p>
+      <button
+          type="button"
+          onClick={downloadImage}
+          className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full"
+        >
+          Download as Image
+        </button>
     </div>
   );
 };

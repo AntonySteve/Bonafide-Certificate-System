@@ -2,10 +2,11 @@
 
 import { useState, useRef } from "react";
 import { toPng } from "html-to-image";
-import { useRouter } from "next/navigation";// Import the letter component
+import { useRouter } from "next/navigation";
 
-const BonafideForm = () => {
-  const router = useRouter()
+export default function page() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     studentName: "",
     regNo: "",
@@ -29,46 +30,28 @@ const BonafideForm = () => {
     "Tutor D": "tutord@example.com",
   };
 
-  const user = useSelector((state) => state.user);
-
-  const tutors = Object.keys(tutorData);
-
   const tutors = ["Tutor A", "Tutor B", "Tutor C", "Tutor D"];
   const yearIncharges = ["Year 1", "Year 2", "Year 3"];
   const yearOption = ["I year", "II year", "III year", "IV year"];
   const sectionOption = ["A", "B", "C", "D"];
-  const sectionOption = ["A", "B", "C"];
   const departments = ["Computer Science", "Electronics", "Mechanical"];
 
   const letterRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-
-    if (name === "tutor") {
-      setFormData((prev) => ({
-        ...prev,
-        tutorEmail: tutorData[value] || "",
-      }));
-    }
-    console.log(formData);
-  };
-
-  const generateLetter = () => {
-    return `
-  PSNA College of Engineering and Technology
-
-  This is to certify that Mr./Ms. ${formData.studentName} S/O. ${formData.father} (Register No: ${formData.regNo}) is a bonafide student of this college, studying in ${formData.year} B.E. Degree in ${formData.department} during the academic year ${formData.academicYear}.
-
-  This Certificate is issued to him for applying to the ${formData.reason}.
-
-                                                               HOD-CSE`;
-  };
-  const handleClick = (e) =>{
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+      ...(name === "tutor" && { tutorEmail: tutorData[value] || "" }),
+    }));
+    console.log(formData)
+    };
+ 
+  const handleNext = (e) => {
     e.preventDefault();
-    router.push('/letter', {formData})
-  }
+    router.push("/letter", { formData });
+  };
 
   const downloadImage = () => {
     if (letterRef.current) {
@@ -87,7 +70,6 @@ const BonafideForm = () => {
 
   const sendFile = async (e) => {
     e.preventDefault();
-
     try {
       const response = await fetch("/api/send-file", {
         method: "POST",
@@ -95,7 +77,7 @@ const BonafideForm = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
-      })
+      });
       const res = await response.json();
       console.log(res);
     } catch (error) {
@@ -105,12 +87,12 @@ const BonafideForm = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl color-black text-black ">
-      <h2 className="text-3xl font-bold color-black mb-8 text-center ">Bonafide Certificate Form</h2>
+    <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl color-black text-black">
+      <h2 className="text-3xl font-bold mb-8 text-center">Bonafide Certificate Form</h2>
 
       {error && <p className="text-red-600 mb-4">{error}</p>}
 
-      <form className="space-y-6">
+      <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
         {Object.entries({
           studentName: "Student Name",
           regNo: "Registration Number",
@@ -128,7 +110,13 @@ const BonafideForm = () => {
           />
         ))}
 
-        {["tutor", "year", "section", "yearIncharge", "department"].map((name) => (
+        {[
+          ["tutor", tutors],
+          ["year", yearOption],
+          ["section", sectionOption],
+          ["yearIncharge", yearIncharges],
+          ["department", departments],
+        ].map(([name, options]) => (
           <select
             key={name}
             name={name}
@@ -138,124 +126,13 @@ const BonafideForm = () => {
             required
           >
             <option value="">Select {name.charAt(0).toUpperCase() + name.slice(1)}</option>
-            {(name === "tutor"
-              ? tutors
-              : name === "year"
-              ? yearOption
-              : name === "section"
-              ? sectionOption
-              : name === "yearIncharge"
-              ? yearIncharges
-              : departments
-            ).map((option) => (
+            {options.map((option) => (
               <option key={option} value={option}>
                 {option}
               </option>
             ))}
           </select>
         ))}
-      <form onSubmit={(e) => e.preventDefault()} className="space-y-6 font-black">
-        <input
-          name="studentName" 
-          placeholder="Student Name"
-          value={formData.studentName}
-          onChange={handleChange}
-          className="w-full p-3 border rounded-lg"
-          required
-        />
-
-        <input
-          name="regNo"
-          placeholder="Registration Number"
-          value={formData.regNo}
-          onChange={handleChange}
-          className="w-full p-3 border rounded-lg"
-          required
-        />
-
-        <select
-          name="tutor"
-          value={formData.tutor}
-          onChange={handleChange}
-          className="w-full p-3 border rounded-lg"
-          required
-        >
-          <option value="">Select Tutor</option>
-          {tutors.map((tutor) => (
-            <option key={tutor} value={tutor}>
-              {tutor}
-            </option>
-          ))}
-        </select>
-
-        <select
-          name="year"
-          value={formData.year}
-          onChange={handleChange}
-          className="w-full p-3 border rounded-lg"
-          required
-        >
-          <option value="">Select Year</option>
-          {yearOption.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
-
-        <select
-          name="section"
-          value={formData.section}
-          onChange={handleChange}
-          className="w-full p-3 border rounded-lg"
-          required
-        >
-          <option value="">Select Section</option>
-          {sectionOption.map((section) => (
-            <option key={section} value={section}>
-              {section}
-            </option>
-          ))}
-        </select>
-
-        <select
-          name="yearIncharge"
-          value={formData.yearIncharge}
-          onChange={handleChange}
-          className="w-full p-3 border rounded-lg"
-          required
-        >
-          <option value="">Select Year Incharge</option>
-          {yearIncharges.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
-
-        <select
-          name="department"
-          value={formData.department}
-          onChange={handleChange}
-          className="w-full p-3 border rounded-lg"
-          required
-        >
-          <option value="">Select Department</option>
-          {departments.map((dept) => (
-            <option key={dept} value={dept}>
-              {dept}
-            </option>
-          ))}
-        </select>
-
-        <input
-          name="academicYear"
-          placeholder="Academic Year"
-          value={formData.academicYear}
-          onChange={handleChange}
-          className="w-full p-3 border rounded-lg"
-          required
-        />
 
         <textarea
           name="reason"
@@ -268,25 +145,24 @@ const BonafideForm = () => {
 
         <button
           type="button"
-          onClick={handleClick}
+          onClick={downloadImage}
           className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full"
         >
           Download as Image
         </button>
-
+        <button type="button" onClick={handleNext}
+         className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full"
+        >Next</button>
         <button
-          type="click"  
+          type="button"
           onClick={sendFile}
           className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-800 w-full"
         >
           Send
-          Next
         </button>
       </form>
 
-      {formData.studentName && <BonafideLetter ref={letterRef} formData={formData} />}
+      {formData.studentName && <div ref={letterRef}>{/* Bonafide Letter Preview */}</div>}
     </div>
   );
 };
-
-export default BonafideForm;
