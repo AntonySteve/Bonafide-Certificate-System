@@ -21,7 +21,7 @@ const BonafideLetter = () => {
       <p className="text-center italic mb-6 text-black">Affiliated to Anna University</p>
 
       <p>
-        This is to certify that <strong>M./Ms. {formData.studentName}</strong> 
+        This is to certify that <strong>Mr./Ms. {formData.studentName}</strong> 
         (Register No: <strong>{formData.regNo}</strong>) is a bonafide student of this college,
         studying in <strong>{formData.year} B.E.</strong> Degree in <strong>{formData.department}</strong> 
         during the academic year <strong>{formData.academicYear}</strong>.
