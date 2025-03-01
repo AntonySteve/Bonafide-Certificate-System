@@ -2,8 +2,11 @@
 
 import { useState, useRef } from "react";
 import { toPng } from "html-to-image";
+import { useRouter } from "next/navigation";
+ // Import the letter component
 
 const BonafideForm = () => {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     studentName: "",
     regNo: "",
@@ -14,34 +17,27 @@ const BonafideForm = () => {
     department: "",
     academicYear: "",
     reason: "",
-
   });
 
   const tutors = ["Tutor A", "Tutor B", "Tutor C", "Tutor D"];
   const yearIncharges = ["Year 1", "Year 2", "Year 3"];
   const yearOption = ["I year", "II year", "III year", "IV year"];
-  const sectionOption = ["A", "B", "C", "B"];
+  const sectionOption = ["A", "B", "C"];
   const departments = ["Computer Science", "Electronics", "Mechanical"];
 
-  const letterRef = useRef(null); 
+  const letterRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const generateLetter = () => {
-    return `
-  PSNA College of Engineering and Technology
-  
-  This is to certify that M./Ms. ${formData.studentName} S/o.Leo Das R (Register No: ${formData.regNo}) is a bonafide student of this college, studying in ${formData.year} B.E. Degree in ${formData.department} during the academic year ${formData.academicYear}.
-  
-  This Certificate is issued to him for applying to the ${formData.reason}.
-  
-                                                               HOD-CSE`;
+  const handleClick = (e) => {
+    e.preventDefault();
+    const queryParams = new URLSearchParams(formData).toString();
+    router.push(`/letter?${queryParams}`);
   };
   
-
   const downloadImage = () => {
     if (letterRef.current) {
       toPng(letterRef.current)
@@ -125,7 +121,6 @@ const BonafideForm = () => {
           ))}
         </select>
 
-
         <select
           name="yearIncharge"
           value={formData.yearIncharge}
@@ -176,19 +171,14 @@ const BonafideForm = () => {
 
         <button
           type="button"
-          onClick={downloadImage}
+          onClick={handleClick}
           className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full"
         >
-          Download as Image
+          Next
         </button>
       </form>
 
-      {formData.studentName && (
-        <div ref={letterRef} className="mt-8 p-6 bg-gray-100 rounded-lg">
-          <h3 className="text-xl font-semibold mb-4">Generated Bonafide Letter:</h3>
-          <pre className="whitespace-pre-wrap">{generateLetter()}</pre>
-        </div>
-      )}
+      {formData.studentName && <BonafideLetter ref={letterRef} formData={formData} />}
     </div>
   );
 };
