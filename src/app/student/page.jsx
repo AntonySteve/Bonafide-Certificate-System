@@ -34,34 +34,15 @@ const BonafideForm = () => {
 
   const generateLetter = () => {
     return `
-PSNA College of Engineering and Technology
-
-From:
-     ${formData.studentName},
-     ${formData.regNo},
-     ${formData.department}/${formData.year}/${formData.section},
-     PSNA College of Engineering and Technology,
-     Dindigul.
-
-To:
-     Head of Department,
-     Computer Science and Engineering,
-     PSNA Collge of Engineering and Technology,
-     Dindigul.
-
-Subject: Request for applying ${formData.reason}
-
-Respected mam,
-
-This is to certify that Mr./Ms. ${formData.studentName} with Registration Number ${formData.regNo} is a bonafide student of our institution. He/She is currently pursuing ${formData.department} under the guidance of ${formData.tutor}. The student is in the academic year ${formData.academicYear}, and the Year Incharge is ${formData.yearIncharge}.
-
-The purpose of applying for this bonafide certificate is: ${formData.reason}.
-
-We certify that the above information is true to the best of our knowledge.
-
-                                                                        Yours faithfully,
-                                                                        ${formData.studentName}`;
+  PSNA College of Engineering and Technology
+  
+  This is to certify that M./Ms. ${formData.studentName} S/o.Leo Das R (Register No: ${formData.regNo}) is a bonafide student of this college, studying in ${formData.year} B.E. Degree in ${formData.department} during the academic year ${formData.academicYear}.
+  
+  This Certificate is issued to him for applying to the ${formData.reason}.
+  
+                                                               HOD-CSE`;
   };
+  
 
   const downloadImage = () => {
     if (letterRef.current) {
