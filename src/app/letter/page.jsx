@@ -4,18 +4,24 @@
 import { useSearchParams } from "next/navigation";
 import { useRef } from "react";
 import { toPng } from "html-to-image";
+import { useRouter } from "next/navigation";
 
 const BonafideLetter = () => {
   const searchParams = useSearchParams();
+  const router = useRouter()
   const letterRef = useRef(null);
 
   const formData = {
     studentName: searchParams.get("studentName"),
     regNo: searchParams.get("regNo"),
+    tutorName: searchParams.get("tutor"),
+    tutorEmail: searchParams.get("tutorEmail"),
+    reason: searchParams.get("reason"),
     year: searchParams.get("year"),
+    section: searchParams.get("section"),
+    yearIncharge: searchParams.get("yearIncharge"), 
     department: searchParams.get("department"),
     academicYear: searchParams.get("academicYear"),
-    reason: searchParams.get("reason"),
   };
 
   const downloadImage = () => {
@@ -44,18 +50,19 @@ const BonafideLetter = () => {
       });
       const res = await response.json();
       console.log(res);
+      router.push('/progress')
     } catch (error) {
       console.error("Error sending file:", error);
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-xl text-black" ref={letterRef}>
-      <img src="https://psnacet.edu.in/img-1/logo-clr.png" alt="" className="relative mb-5 ml-50" />
+
+    <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-xl text-black">
+      <img src="https://psnacet.edu.in/img-1/logo-clr.png" alt="" className="mb-5 center ml-50" />
+     
 
       <h2 className="text-2xl font-bold text-center mb-4">Bonafide Certificate</h2>
-      <p className="text-center font-semibold">PSNA College of Engineering and Technology</p>
-      <p className="text-center italic mb-6">Affiliated to Anna University</p>
 
       <p>
         This is to certify that <strong>Mr./Ms. {formData.studentName}</strong> (Register No: <strong>{formData.regNo}</strong>)
