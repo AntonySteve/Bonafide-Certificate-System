@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useRef } from "react";
 import { toPng } from "html-to-image";
+
 const BonafideLetter = () => {
   const searchParams = useSearchParams();
    const letterRef = useRef(null);

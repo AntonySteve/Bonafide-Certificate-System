@@ -156,6 +156,7 @@ export default function page() {
         <button
           type="button"
           onClick={sendFile}
+          
           className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-800 w-full"
         >
           Send
