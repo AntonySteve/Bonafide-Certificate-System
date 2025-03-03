@@ -5,7 +5,7 @@ const tutorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    studentRegNo : {
+    regNo : {
         type: String,
         required: true,
         unique: true

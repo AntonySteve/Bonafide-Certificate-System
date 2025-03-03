@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { toPng } from "html-to-image";
+// Form Page (page.jsx)
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function page() {
+export default function Page() {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -21,8 +21,6 @@ export default function page() {
     reason: "",
   });
 
-  const [error, setError] = useState("");
-
   const tutorData = {
     "Tutor A": "tutora@example.com",
     "Tutor B": "tutorb@example.com",
@@ -36,8 +34,6 @@ export default function page() {
   const sectionOption = ["A", "B", "C", "D"];
   const departments = ["CSE", "ECE", "ME"];
 
-  const letterRef = useRef(null);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -46,53 +42,19 @@ export default function page() {
       ...(name === "tutor" && { tutorEmail: tutorData[value] || "" }),
     }));
     console.log(formData)
-    };
- 
+  };
+
   const handleNext = (e) => {
     e.preventDefault();
-    router.push("/letter", { formData });
-  };
-
-  const downloadImage = () => {
-    if (letterRef.current) {
-      toPng(letterRef.current)
-        .then((dataUrl) => {
-          const link = document.createElement("a");
-          link.href = dataUrl;
-          link.download = "bonafide-certificate.png";
-          link.click();
-        })
-        .catch((err) => {
-          console.error("Image generation failed:", err);
-        });
-    }
-  };
-
-  const sendFile = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("/api/send-file", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      const res = await response.json();
-      console.log(res);
-    } catch (error) {
-      console.error("Error sending file:", error);
-      setError("Failed to send the file.");
-    }
+    const queryString = new URLSearchParams(formData).toString();
+    router.push(`/letter?${queryString}`);
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl color-black text-black">
+    <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl text-black">
       <h2 className="text-3xl font-bold mb-8 text-center">Bonafide Certificate Form</h2>
 
-      {error && <p className="text-red-600 mb-4">{error}</p>}
-
-      <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+      <form className="space-y-6" onSubmit={handleNext}>
         {Object.entries({
           studentName: "Student Name",
           regNo: "Registration Number",
@@ -144,25 +106,12 @@ export default function page() {
         />
 
         <button
-          type="button"
-          onClick={downloadImage}
+          type="submit"
           className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full"
         >
-          Download as Image
-        </button>
-        <button type="button" onClick={handleNext}
-         className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full"
-        >Next</button>
-        <button
-          type="button"
-          onClick={sendFile}
-          className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-800 w-full"
-        >
-          Send
+          Next
         </button>
       </form>
-
-      {formData.studentName && <div ref={letterRef}>{/* Bonafide Letter Preview */}</div>}
     </div>
   );
-};
+}
