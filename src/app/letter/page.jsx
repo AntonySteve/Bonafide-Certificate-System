@@ -72,7 +72,7 @@ const BonafideLetter = () => {
       <h2 className="text-2xl font-bold text-center mb-4">Bonafide Certificate</h2>
 
       <p>
-        This is to certify that <strong>Mr./Ms. {formData.studentName}</strong> S/O or D/O of<strong> {father.fatherName} </strong>(Register No: <strong>{formData.regNo}</strong>)
+        This is to certify that <strong>Mr./Ms. {formData.studentName}</strong> (Reg No: <strong>{formData.regNo}</strong>) S/O or D/O of<strong> {father.fatherName} </strong>
         is a bonafide student of this college, studying in <strong>{formData.year} B.E.</strong> Degree in <strong>{formData.department} </strong>
          during the academic year <strong>{formData.academicYear}</strong>.
       </p>

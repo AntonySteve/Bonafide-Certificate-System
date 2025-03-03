@@ -40,10 +40,9 @@ export default function Page() {
   const yearIncharges = ["Year 1", "Year 2", "Year 3", "Year 4"];
   const yearOption = ["I year", "II year", "III year", "IV year"];
   const sectionOption = ["A", "B", "C", "D"];
-<<<<<<< HEAD
-=======
+
   //const departments = ["CSE", "ECE", "ME"];
->>>>>>> 8fa2bd1b6a6a0bd82cccc67db17d475fc62beba3
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -89,10 +88,6 @@ export default function Page() {
           ["year", yearOption],
           ["section", sectionOption],
           ["yearIncharge", yearIncharges],
-<<<<<<< HEAD
-=======
-          //["department", departments],
->>>>>>> 8fa2bd1b6a6a0bd82cccc67db17d475fc62beba3
         ].map(([name, options]) => (
           <select
             key={name}
