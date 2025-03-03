@@ -103,7 +103,7 @@ export default function Login() {
         {/* Sign Up Link */}
         <div className="mt-4 text-center">
           <p>Don't have an account?</p>
-          <button className="text-blue-600 hover:underline " onClick={handleClick}>Sign Up</button>
+          <button className="text-blue-600 hover:underline cursor-pointer" onClick={handleClick}>Sign Up</button>
         </div>
       </form>
     </div>

@@ -2,25 +2,24 @@ import mongoose from "mongoose";
 
 const inchargeSchema = new mongoose.Schema({
     studentName : {
-            type: String,
-            required: true
+        type: String,
+        required: true
     },
-    regNo : {
-            type: String,
-            required: true,
-            unique: true
+    regNo:{
+        type: String,
+        required: true,
+    },
+    tutorName: {
+        type: String,
+        required: true
     },
     inchargeName:{
             type: String,
-            required: true
+            required: true                      
     },
     inchargeEmail : {
             type: String,
             required: true
-    },
-    unseen: {
-            type: Boolean,
-            default: false,
     },
     reason: {
             type: String,
@@ -28,6 +27,7 @@ const inchargeSchema = new mongoose.Schema({
     },
     }, { timestamps: true}
 );
+
 
 const Incharge = mongoose.models.Incharge || mongoose.model('Incharge', inchargeSchema);
 

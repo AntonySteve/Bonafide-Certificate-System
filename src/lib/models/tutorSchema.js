@@ -18,10 +18,6 @@ const tutorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    unseen: {
-        type: Boolean,
-        default: false,
-    },
     reason: {
         type: String,
         required: true
@@ -39,10 +35,6 @@ const tutorSchema = new mongoose.Schema({
         required: true
     },
     inchargeEmail :{
-        type: String,
-        required: true
-    },
-    department: {
         type: String,
         required: true
     },
