@@ -13,7 +13,7 @@ const BonafideLetter = () => {
 
   const formData = {
     studentName: searchParams.get("studentName"),
-    regNo: searchParams.get("regNo"),
+    studentRegNo: searchParams.get("studentRegNo"),
     tutorName: searchParams.get("tutor"),
     tutorEmail: searchParams.get("tutorEmail"),
     reason: searchParams.get("reason"),
@@ -21,7 +21,6 @@ const BonafideLetter = () => {
     section: searchParams.get("section"),
     yearIncharge: searchParams.get("yearIncharge"),
     inchargeEmail: searchParams.get("inchargeEmail"),
-    department: searchParams.get("department"),
     academicYear: searchParams.get("academicYear"),
     fatherName: searchParams.get("father"),
   };
@@ -79,13 +78,11 @@ const BonafideLetter = () => {
         />
       </div>
 
-      {/* Title */}
       <h2 className="text-3xl font-extrabold text-center mb-6">Bonafide Certificate</h2>
-
       {/* Certificate Content */}
       <p className="leading-7 mb-4">
         This is to certify that <strong>Mr./Ms. {formData.studentName}</strong>, S/O or D/O of
-        <strong> {formData.fatherName}</strong> (Register No: <strong>{formData.regNo}</strong>) is a bonafide
+        <strong> {formData.fatherName}</strong> (Register No: <strong>{formData.studentRegNo}</strong>) is a bonafide
         student of this college, studying in <strong>{formData.year} B.E.</strong> Degree in
         <strong> {formData.department}</strong> during the academic year <strong>{formData.academicYear}</strong>.
       </p>

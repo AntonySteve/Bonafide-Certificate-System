@@ -8,7 +8,7 @@ export default function Page() {
 
   const [formData, setFormData] = useState({
     studentName: "",
-    regNo: "",
+    studentRegNo: "",
     father: "",
     tutor: "",
     tutorEmail: "",
@@ -16,7 +16,6 @@ export default function Page() {
     section: "",
     yearIncharge: "",
     inchargeEmail: "",
-    department: "",
     academicYear: "",
     reason: "",
   });
@@ -39,30 +38,34 @@ export default function Page() {
   const yearIncharges = Object.keys(inchargeData);
   const yearOption = ["I year", "II year", "III year", "IV year"];
   const sectionOption = ["A", "B", "C", "D"];
-<<<<<<< HEAD
-=======
 
-  //const departments = ["CSE", "ECE", "ME"];
-
->>>>>>> d7e6dc3c4dd47ab676ed4e79ad8e4a7300998e4c
-
-  // Optimize handleChange using useCallback
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-      ...(name === "tutor" && { tutorEmail: tutorData[value] || "" }),
-      ...(name === "yearIncharge" && { inchargeEmail: inchargeData[value] || "" }),
-    }));
+    
+    setFormData((prev) => {
+      const updatedData = {
+        ...prev,
+        [name]: value,
+      };
+      if (name === "tutor") {
+        updatedData.tutorEmail = tutorData[value] || "";
+      }
+      if (name === "yearIncharge") {
+        updatedData.inchargeEmail = inchargeData[value] || "";
+      }
+      console.log(updatedData); 
+      return updatedData;
+    });
   }, []);
+  
 
   const handleNext = (e) => {
     e.preventDefault();
     const queryString = new URLSearchParams(formData).toString();
     router.push(`/letter?${queryString}`);
   };
-
+  
+  
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-lg text-black">
       <h2 className="text-4xl font-bold mb-8 text-center text-blue-700">Bonafide Certificate Form</h2>
@@ -70,7 +73,7 @@ export default function Page() {
       <form className="space-y-6" onSubmit={handleNext}>
         {Object.entries({
           studentName: "Student Name",
-          regNo: "Registration Number",
+          studentRegNo: "Registration Number",
           father: "Father's Name",
           academicYear: "Academic Year",
         }).map(([name, placeholder]) => (
