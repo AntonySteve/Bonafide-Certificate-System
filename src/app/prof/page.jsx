@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 
 
-const steps = ["Application Received", "Verification", "Approval", "Certificate Issued"];
+const steps = ["Application Received", "Tutor", "Professional-in-charge", "HOD"];
 
 const BonafideProgress = () => {
   const [currentStep, setCurrentStep] = useState(1);
