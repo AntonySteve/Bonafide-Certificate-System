@@ -25,20 +25,20 @@ const BonafideLetter = () => {
     academicYear: searchParams.get("academicYear"),
   };
 
-  const downloadImage = () => {
-    if (letterRef.current) {
-      toPng(letterRef.current)
-        .then((dataUrl) => {
-          const link = document.createElement("a");
-          link.href = dataUrl;
-          link.download = "bonafide-certificate.png";
-          link.click();
-        })
-        .catch((err) => {
-          console.error("Image generation failed:", err);
-        });
-    }
-  };
+  // const downloadImage = () => {
+  //   if (letterRef.current) {
+  //     toPng(letterRef.current)
+  //       .then((dataUrl) => {
+  //         const link = document.createElement("a");
+  //         link.href = dataUrl;
+  //         link.download = "bonafide-certificate.png";
+  //         link.click();
+  //       })
+  //       .catch((err) => {
+  //         console.error("Image generation failed:", err);
+  //       });
+  //   }
+  // };
 
   const sendFile = async () => {
     try {
@@ -77,9 +77,9 @@ const BonafideLetter = () => {
 
       <p className="mt-6 text-right font-bold">HOD-{formData.department}</p>
 
-      <button onClick={downloadImage} className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full mt-4">
+      {/* <button onClick={downloadImage} className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full mt-4">
         Download as Image
-      </button>
+      </button> */}
       <button onClick={sendFile} className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-800 w-full mt-4">
         Send
       </button>
