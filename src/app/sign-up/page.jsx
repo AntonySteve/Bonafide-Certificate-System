@@ -15,6 +15,7 @@ export default function SignUp() {
   const router = useRouter()
   const [error, setError] = useState('');
   const dispatch = useDispatch(); 
+  const tutors = ["tutora@psnacet.edu.in", "tutorb@psnacet.edu.in", "tutorc@psnacet.edu.in", "tutord@psnacet.edu.in"]
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
@@ -45,11 +46,14 @@ export default function SignUp() {
       const result = await response.json();
       console.log(result);
       dispatch(setUser(result.user));
+      if (result.user && tutors.includes(result.user.email)) {
+        router.push('/tutor');
+      } else {
+        router.push('/student');
+      }
     } catch (error) {
       console.log(error)
     }
-    
-    cons
     setError('');
     console.log('Form submitted', data);
   };
@@ -114,9 +118,9 @@ export default function SignUp() {
         </button>
 
         {/* Sign Up Link */}
-        <div className="mt-4 text-center text-blue-500">
+        <div className="mt-4 text-center">
           <p>Already have an account?</p>
-          <button className="text-blue-600 hover:underline" onClick={handleClick}>Sign in</button>
+          <button className="text-blue-600 hover:underline cursor-pointer" onClick={handleClick}>Sign in</button>
         </div>
       </form>
     </div>

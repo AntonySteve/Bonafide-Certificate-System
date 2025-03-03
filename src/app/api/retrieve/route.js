@@ -25,7 +25,7 @@ export async function GET(req) {
         headers: { "Content-Type": "application/json" },
       });
     }
-
+    console.log(tutors)
     return new Response(JSON.stringify({ tutors }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
