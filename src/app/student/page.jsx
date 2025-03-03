@@ -39,6 +39,12 @@ export default function Page() {
   const yearIncharges = Object.keys(inchargeData);
   const yearOption = ["I year", "II year", "III year", "IV year"];
   const sectionOption = ["A", "B", "C", "D"];
+<<<<<<< HEAD
+=======
+
+  //const departments = ["CSE", "ECE", "ME"];
+
+>>>>>>> d7e6dc3c4dd47ab676ed4e79ad8e4a7300998e4c
 
   // Optimize handleChange using useCallback
   const handleChange = useCallback((e) => {
