@@ -34,7 +34,7 @@ export default function page() {
   const yearIncharges = ["Year 1", "Year 2", "Year 3"];
   const yearOption = ["I year", "II year", "III year", "IV year"];
   const sectionOption = ["A", "B", "C", "D"];
-  const departments = ["Computer Science", "Electronics", "Mechanical"];
+  const departments = ["CSE", "ECE", "ME"];
 
   const letterRef = useRef(null);
 

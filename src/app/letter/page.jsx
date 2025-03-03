@@ -32,9 +32,11 @@ const BonafideLetter = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-xl text-black">
+      <img src="https://psnacet.edu.in/img-1/logo-clr.png" alt="" className="relative mb-5" />
+     
+     
+
       <h2 className="text-2xl font-bold text-center mb-4 text-black">Bonafide Certificate</h2>
-      <p className="text-center font-semibold text-black">PSNA College of Engineering and Technology</p>
-      <p className="text-center italic mb-6 text-black">Affiliated to Anna University</p>
 
       <p>
         This is to certify that <strong>Mr./Ms. {formData.studentName}</strong> 
