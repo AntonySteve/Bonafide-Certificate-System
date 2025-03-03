@@ -32,7 +32,7 @@ const BonafideLetter = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-xl text-black">
-      <img src="https://psnacet.edu.in/img-1/logo-clr.png" alt="" className="relative mb-5" />
+      <img src="https://psnacet.edu.in/img-1/logo-clr.png" alt="" className="mb-5 center ml-50" />
      
      
 
