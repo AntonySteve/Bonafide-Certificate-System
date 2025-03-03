@@ -10,12 +10,10 @@ export const POST = async (req, res) => {
             studentRegNo : data.regNo,
             tutorName : data.tutor,
             tutorEmail : data.tutorEmail,
-            reason : data.reason,
             year : data.year,
-            section : data.section,
-            yearIncharge : data.yearIncharge,
             department : data.department,
-            academicYear : data.academicYear
+            academicYear : data.academicYear,
+            reason : data.reason,
         });
         await newRequest.save();
         return new Response(JSON.stringify(newRequest), { status: 200 });
