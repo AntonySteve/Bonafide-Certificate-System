@@ -1,7 +1,6 @@
 "use client";
 
-// Form Page (page.jsx)
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
@@ -36,25 +35,21 @@ export default function Page() {
     "Year 4": "year4@psnacet.edu.in",
   };
 
-  const tutors = ["Tutor A", "Tutor B", "Tutor C", "Tutor D"];
-  const yearIncharges = ["Year 1", "Year 2", "Year 3", "Year 4"];
+  const tutors = Object.keys(tutorData);
+  const yearIncharges = Object.keys(inchargeData);
   const yearOption = ["I year", "II year", "III year", "IV year"];
   const sectionOption = ["A", "B", "C", "D"];
-<<<<<<< HEAD
-=======
-  //const departments = ["CSE", "ECE", "ME"];
->>>>>>> 8fa2bd1b6a6a0bd82cccc67db17d475fc62beba3
 
-  const handleChange = (e) => {
+  // Optimize handleChange using useCallback
+  const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
       ...(name === "tutor" && { tutorEmail: tutorData[value] || "" }),
-      ...(name === "yearIncharge" && {inchargeEmail: inchargeData[value] || ""})
+      ...(name === "yearIncharge" && { inchargeEmail: inchargeData[value] || "" }),
     }));
-    console.log(formData)
-  };
+  }, []);
 
   const handleNext = (e) => {
     e.preventDefault();
@@ -63,8 +58,8 @@ export default function Page() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl text-black">
-      <h2 className="text-3xl font-bold mb-8 text-center">Bonafide Certificate Form</h2>
+    <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-lg text-black">
+      <h2 className="text-4xl font-bold mb-8 text-center text-blue-700">Bonafide Certificate Form</h2>
 
       <form className="space-y-6" onSubmit={handleNext}>
         {Object.entries({
@@ -73,15 +68,20 @@ export default function Page() {
           father: "Father's Name",
           academicYear: "Academic Year",
         }).map(([name, placeholder]) => (
-          <input
-            key={name}
-            name={name}
-            placeholder={placeholder}
-            value={formData[name]}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg"
-            required
-          />
+          <div key={name}>
+            <label htmlFor={name} className="block mb-2 font-medium">
+              {placeholder}
+            </label>
+            <input
+              id={name}
+              name={name}
+              placeholder={placeholder}
+              value={formData[name]}
+              onChange={handleChange}
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
         ))}
 
         {[
@@ -89,41 +89,50 @@ export default function Page() {
           ["year", yearOption],
           ["section", sectionOption],
           ["yearIncharge", yearIncharges],
-<<<<<<< HEAD
-=======
-          //["department", departments],
->>>>>>> 8fa2bd1b6a6a0bd82cccc67db17d475fc62beba3
         ].map(([name, options]) => (
-          <select
-            key={name}
-            name={name}
-            value={formData[name]}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg"
-            required
-          >
-            <option value="">Select {name.charAt(0).toUpperCase() + name.slice(1)}</option>
-            {options.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+          <div key={name}>
+            <label htmlFor={name} className="block mb-2 font-medium">
+              {name.charAt(0).toUpperCase() + name.slice(1)}
+            </label>
+            <select
+              id={name}
+              name={name}
+              value={formData[name]}
+              onChange={handleChange}
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              required
+            >
+              <option value="">Select {name.charAt(0).toUpperCase() + name.slice(1)}</option>
+              {options.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
         ))}
 
-        <textarea
-          name="reason"
-          placeholder="Reason for applying bonafide"
-          value={formData.reason}
-          onChange={handleChange}
-          className="w-full p-3 border rounded-lg"
-          required
-        />
+        <div>
+          <label htmlFor="reason" className="block mb-2 font-medium">
+            Reason for applying bonafide
+          </label>
+          <textarea
+            id="reason"
+            name="reason"
+            placeholder="Reason for applying bonafide"
+            value={formData.reason}
+            onChange={handleChange}
+            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
 
-        <button type="button" onClick={handleNext}
-         className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full cursor-pointer"
-        >Next</button>
-        
+        <button
+          type="submit"
+          className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full cursor-pointer transition-all duration-300"
+        >
+          Next
+        </button>
       </form>
     </div>
   );
