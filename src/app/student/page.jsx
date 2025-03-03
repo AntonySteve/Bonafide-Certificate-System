@@ -40,7 +40,6 @@ export default function Page() {
   const yearIncharges = ["Year 1", "Year 2", "Year 3", "Year 4"];
   const yearOption = ["I year", "II year", "III year", "IV year"];
   const sectionOption = ["A", "B", "C", "D"];
-  const departments = ["CSE", "ECE", "ME"];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -86,7 +85,6 @@ export default function Page() {
           ["year", yearOption],
           ["section", sectionOption],
           ["yearIncharge", yearIncharges],
-          ["department", departments],
         ].map(([name, options]) => (
           <select
             key={name}
@@ -115,7 +113,7 @@ export default function Page() {
         />
 
         <button type="button" onClick={handleNext}
-         className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full"
+         className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full cursor-pointer"
         >Next</button>
         
       </form>

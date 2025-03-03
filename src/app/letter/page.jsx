@@ -53,7 +53,7 @@ const BonafideLetter = () => {
       console.log(res);
       router.push('/Sprogress')
 
-      //router.push('/progress')
+      
     } catch (error) {
       console.error("Error sending file:", error);
     }
@@ -77,12 +77,12 @@ const BonafideLetter = () => {
         This Certificate is issued to him/her for applying to the <strong>{formData.reason}</strong>.
       </p>
 
-      <p className="mt-6 text-right font-bold">HOD-{formData.department}</p>
+      <p className="mt-10 mr-5 text-right font-bold">HOD-CSE</p>
 
       {/* <button onClick={downloadImage} className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full mt-4">
         Download as Image
       </button> */}
-      <button onClick={sendFile} className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-800 w-full mt-4">
+      <button onClick={sendFile} className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-800 w-full mt-4 cursor-pointer">
         Send
       </button>
     </div>
