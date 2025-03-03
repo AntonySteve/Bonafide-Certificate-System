@@ -16,20 +16,28 @@ export default function Page() {
     year: "",
     section: "",
     yearIncharge: "",
+    inchargeEmail: "",
     department: "",
     academicYear: "",
     reason: "",
   });
 
   const tutorData = {
-    "Tutor A": "tutora@example.com",
-    "Tutor B": "tutorb@example.com",
-    "Tutor C": "tutorc@example.com",
-    "Tutor D": "tutord@example.com",
+    "Tutor A": "tutora@psnacet.edu.in",
+    "Tutor B": "tutorb@psnacet.edu.in",
+    "Tutor C": "tutorc@psnacet.edu.in",
+    "Tutor D": "tutord@psnacet.edu.in",
+  };
+
+  const inchargeData = {
+    "Year 1": "year1@psnacet.edu.in",
+    "Year 2": "year2@psnacet.edu.in",
+    "Year 3": "year3@psnacet.edu.in",
+    "Year 4": "year4@psnacet.edu.in",
   };
 
   const tutors = ["Tutor A", "Tutor B", "Tutor C", "Tutor D"];
-  const yearIncharges = ["Year 1", "Year 2", "Year 3"];
+  const yearIncharges = ["Year 1", "Year 2", "Year 3", "Year 4"];
   const yearOption = ["I year", "II year", "III year", "IV year"];
   const sectionOption = ["A", "B", "C", "D"];
   const departments = ["CSE", "ECE", "ME"];
@@ -40,6 +48,7 @@ export default function Page() {
       ...prev,
       [name]: value,
       ...(name === "tutor" && { tutorEmail: tutorData[value] || "" }),
+      ...(name === "yearIncharge" && {inchargeEmail: inchargeData[value] || ""})
     }));
     console.log(formData)
   };

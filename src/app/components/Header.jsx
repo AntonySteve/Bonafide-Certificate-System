@@ -11,10 +11,11 @@ const handleClick = (e) => {
   const router = useRouter();
   return (
     <div>
-        
-          <button className='px-4 py-2 bg-white' onClick={handleClick}>
+        <header className='h-20 bg-blue-500 w-full'>
+            <button className='px-4 py-2 bg-white' onClick={handleClick}>
                 Login
-         </button>
+            </button>
+        </header>
     </div>
   )
 }

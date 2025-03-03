@@ -114,7 +114,7 @@ export default function SignUp() {
         </button>
 
         {/* Sign Up Link */}
-        <div className="mt-4 text-center">
+        <div className="mt-4 text-center text-blue-500">
           <p>Already have an account?</p>
           <button className="text-blue-600 hover:underline" onClick={handleClick}>Sign in</button>
         </div>

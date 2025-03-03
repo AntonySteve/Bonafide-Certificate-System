@@ -26,7 +26,6 @@ export default function Login() {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-
     if (!data.email.endsWith('@psnacet.edu.in')) {
       setError('Only @psnacet.edu.in emails are allowed.');
       return;
@@ -96,7 +95,7 @@ export default function Login() {
         {/* Sign In Button */}
         <button
           onClick={handleSignIn}
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 cursor-pointer"
         >
           Sign In
         </button>
@@ -104,7 +103,7 @@ export default function Login() {
         {/* Sign Up Link */}
         <div className="mt-4 text-center">
           <p>Don't have an account?</p>
-          <button className="text-blu+e-600 hover:underline" onClick={handleClick}>Sign Up</button>
+          <button className="text-blue-600 hover:underline " onClick={handleClick}>Sign Up</button>
         </div>
       </form>
     </div>
