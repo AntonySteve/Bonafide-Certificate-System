@@ -1,4 +1,3 @@
-
 // Letter Page (Letter.jsx)
 "use client";
 
@@ -52,14 +51,16 @@ const BonafideLetter = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-xl text-black" ref={letterRef}>
+      <img src="https://psnacet.edu.in/img-1/logo-clr.png" alt="" className="relative mb-5 ml-50" />
+
       <h2 className="text-2xl font-bold text-center mb-4">Bonafide Certificate</h2>
       <p className="text-center font-semibold">PSNA College of Engineering and Technology</p>
       <p className="text-center italic mb-6">Affiliated to Anna University</p>
 
       <p>
         This is to certify that <strong>Mr./Ms. {formData.studentName}</strong> (Register No: <strong>{formData.regNo}</strong>)
-        is a bonafide student of this college, studying in <strong>{formData.year} B.E.</strong> Degree in <strong>{formData.department}</strong>
-        during the academic year <strong>{formData.academicYear}</strong>.
+        is a bonafide student of this college, studying in <strong>{formData.year} B.E.</strong> Degree in <strong>{formData.department} </strong>
+         during the academic year <strong>{formData.academicYear}</strong>.
       </p>
 
       <p className="mt-4">
@@ -68,8 +69,12 @@ const BonafideLetter = () => {
 
       <p className="mt-6 text-right font-bold">HOD-{formData.department}</p>
 
-      <button onClick={downloadImage} className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full mt-4">Download as Image</button>
-      <button onClick={sendFile} className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-800 w-full mt-4">Send</button>
+      <button onClick={downloadImage} className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full mt-4">
+        Download as Image
+      </button>
+      <button onClick={sendFile} className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-800 w-full mt-4">
+        Send
+      </button>
     </div>
   );
 };
