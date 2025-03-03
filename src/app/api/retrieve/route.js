@@ -1,11 +1,12 @@
 import Tutor from "@/lib/models/tutorSchema";
 import connectDB from "@/lib/db/mongodb";
 
-export const GET = async (req) => {
-  try {
-    await connectDB(); 
+export async function GET(req){
+  await connectDB();
 
-    const email = await req.json();
+  try { 
+    const {email} = await req.json();
+    console.log(email)
     if (!email) {
       return new Response(JSON.stringify({ error: "Email is required" }), {
         status: 400,
@@ -18,7 +19,7 @@ export const GET = async (req) => {
         status: 404,
       });
     }
-
+    console.log(tutors)
     return new Response(JSON.stringify({ tutors }),{status: 200});
 
   } catch (error) {

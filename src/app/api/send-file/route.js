@@ -5,17 +5,18 @@ export const POST = async (req, res) => {
     await connectDB();
     try {
         const data  = await req.json();
+        console.log(data)
         const newRequest = await Tutor.create({
             studentName : data.studentName,
-            studentRegNo : data.regNo,
-            tutorName : data.tutor,
+            regNo : data.regNo,  // Change studentRegNo to regNo
+            tutorName : data.tutorName,
             tutorEmail : data.tutorEmail,
             reason : data.reason,
             year : data.year,
-            section : data.section,
+            section: data.section,
             yearIncharge : data.yearIncharge,
             department : data.department,
-            academicYear : data.academicYear
+            academicYear : data.academicYear,   
         });
         await newRequest.save();
         return new Response(JSON.stringify(newRequest), { status: 200 });
