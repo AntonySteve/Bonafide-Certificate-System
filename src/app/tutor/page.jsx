@@ -1,63 +1,58 @@
-  'use client';
+'use client';
 
-  import React, { useEffect, useState } from 'react';
-  import { useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-  export default function TutorPage() {
-    const user = useSelector((state) => state.user);
-    const [tutors, setTutors] = useState([]);
-    const [loading, setLoading] = useState(true);
+export default function TutorPage() {
+  const user = useSelector((state) => state.user);
 
-    useEffect(() => {
-      const fetchTutors = async () => {
-        if (!user?.email) return; 
+  const handleAccept = (id) => {
+    console.log("Accepted tutor with ID:", id);  
+  };
 
-        try {
-          console.log("User Email:", user.email);
-          const response = await fetch('/api/retrieve',{
-              method: "GET",
-              headers: {
-                  'Content-type': 'application/json'
-              },
-              body: JSON.stringify(user.email),
-          }
-          );
-          const data = await response.json();
-          if (response.ok) {
-            console.log("Matching Tutors:", data.tutors);
-            setTutors(data.tutors || []);
-          } else {
-            console.error("Error:", data.error || "Unknown error");
-            setTutors([]);
-          }
+  const handleDecline = (id) => {
+    console.log("Declined tutor with ID:", id); 
+  };
 
-        } catch (error) {
-          console.error("Error fetching tutors:", error);
-        } finally {
-          setLoading(false); // Stop loading once request completes
-        }
-      };
+  const tutors = [
+    {
+      _id: '1',
+      tutorName: 'Karthik Raja',
+      tutorEmail: 'karthik@psnacet.edu.in',
+      reason: 'Educational Loan',
+    },
+  ];
 
-      fetchTutors();
-    }, [user.email]);
+  return (
+    <div style={{ padding: '20px' }}>
+      
 
-    return (
-      <div>
-        <h1>Tutor Page</h1>
-
-        {loading ? (
-          <p>Loading tutors...</p>
-        ) : tutors.length > 0 ? (
-          tutors.map((tutor) => (
-            <div key={tutor._id}>
-              <p>Name: {tutor.name}</p>
-              <p>Email: {tutor.email}</p>
-              <p>Subject: {tutor.subject}</p>
-            </div>
-          ))
-        ) : (
-          <p>No matching tutors found.</p>
-        )}
-      </div>
-    );
-  }
+      {tutors.map((tutor) => (
+        <div key={tutor._id} className="flex justify-evenly items-center" style={{
+          border: '1px solid #ccc',
+          borderRadius: '12px',
+          padding: '20px',
+          marginBottom: '20px',
+          boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+          backgroundColor: '#696969',
+        }}>
+          <p className='text-white'><strong>Name:</strong> Karthik Raja </p>
+          <p className='text-white'><strong>Register No:</strong> 92132213084</p>
+          <p className='text-white'><strong>Reason:</strong> Educational Loan</p>
+          <div style={{ marginTop: '10px' }}>
+            <button onClick={() => handleAccept(tutor._id)}
+              style={{ marginRight: '10px', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', backgroundColor: '#4CAF50', color: 'white' }}>
+              Accept
+            </button>
+            <button onClick={() => handleDecline(tutor._id)}
+              style={{ padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', backgroundColor: '#f44336', color: 'white' }}
+              className='flex-col align-center'
+              >
+              Decline
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}

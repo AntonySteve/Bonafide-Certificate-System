@@ -15,6 +15,7 @@ export const POST = async (req, res) => {
             year : data.year,
             section: data.section,
             yearIncharge : data.yearIncharge,
+            inchargeEmail : data.inchargeEmail,
             department : data.department,
             academicYear : data.academicYear,   
         });

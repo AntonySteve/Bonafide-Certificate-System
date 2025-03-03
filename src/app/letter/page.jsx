@@ -20,6 +20,7 @@ const BonafideLetter = () => {
     year: searchParams.get("year"),
     section: searchParams.get("section"),
     yearIncharge: searchParams.get("yearIncharge"), 
+    inchargeEmail: searchParams.get("inchargeEmail"),
     department: searchParams.get("department"),
     academicYear: searchParams.get("academicYear"),
   };
@@ -50,7 +51,7 @@ const BonafideLetter = () => {
       });
       const res = await response.json();
       console.log(res);
-      router.push('/progress')
+      //router.push('/progress')
     } catch (error) {
       console.error("Error sending file:", error);
     }
