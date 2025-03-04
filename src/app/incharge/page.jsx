@@ -86,7 +86,7 @@ export default function InchargePage() {
     );
   };
 
-  if (loading) return <p>Loading Incharges...</p>;
+  if (loading) return <p>Loading Requests...</p>;
 
   if (error) return <p>Error: {error}</p>;
 
