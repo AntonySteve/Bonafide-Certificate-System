@@ -5,10 +5,9 @@ const tutorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    regNo : {
+    studentRegNo : {
         type: String,
         required: true,
-        unique: true
     },
     tutorName:{
         type: String,
@@ -39,6 +38,10 @@ const tutorSchema = new mongoose.Schema({
         required: true
     },
     academicYear: {
+        type: String,
+        required: true
+    },
+    fatherName: {
         type: String,
         required: true
     }

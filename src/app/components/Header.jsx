@@ -13,11 +13,11 @@ export default function Header() {
   };
 
   return (
-    <div
-    className="h-screen flex flex-col items-center justify-center bg-cover bg-center relative"
-    style={{ backgroundImage: "url('Desktop - 2-fotor.png')", backgroundSize: "cover", backgroundPosition: "center",filter:"brightness(1.0) contrast(0.8)" }} // Background Image
+    <div className="h-screen flex flex-col items-center justify-center bg-cover bg-center relative"
+  style={{ backgroundImage: "url('Desktop - 2-fotor.png')", backgroundSize: "cover", backgroundPosition: "center",filter:"brightness(1.0) contrast(0.8)" }} // Background Image
   >
-    <img src="./Desktop - 2" alt="" />
+  
+
       {/* College Logo & Name (Top of the Page) */}
       <div className="absolute top-8 flex flex-col items-center">
         <img
@@ -44,11 +44,11 @@ export default function Header() {
         >
           Welcome to E-Bonafide Certificate System
         </motion.h1>
-
+    
         <motion.button
           onClick={handleClick}
-          className="px-6 py-3 bg-white text-blue-600 font-semibold text-lg rounded-full shadow-lg hover:bg-gray-200 transition-transform transform scale-100 cursor-pointer"
-          whileHover={{ scale: 1.1 }}
+          className="px-6 py-3 bg-white text-black-100 font-semibold text-lg rounded-full shadow-lg hover:bg-gray-200 transition-transform scale-100 cursor-pointer"
+          whileHover={{ scale: 1.0 }}
           whileTap={{ scale: 0.9 }}
         >
           Login

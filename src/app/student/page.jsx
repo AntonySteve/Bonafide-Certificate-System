@@ -1,7 +1,6 @@
 "use client";
 
-// Form Page (page.jsx)
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
@@ -9,7 +8,7 @@ export default function Page() {
 
   const [formData, setFormData] = useState({
     studentName: "",
-    regNo: "",
+    studentRegNo: "",
     father: "",
     tutor: "",
     tutorEmail: "",
@@ -17,7 +16,6 @@ export default function Page() {
     section: "",
     yearIncharge: "",
     inchargeEmail: "",
-    department: "",
     academicYear: "",
     reason: "",
   });
@@ -36,49 +34,63 @@ export default function Page() {
     "Year 4": "year4@psnacet.edu.in",
   };
 
-  const tutors = ["Tutor A", "Tutor B", "Tutor C", "Tutor D"];
-  const yearIncharges = ["Year 1", "Year 2", "Year 3", "Year 4"];
+  const tutors = Object.keys(tutorData);
+  const yearIncharges = Object.keys(inchargeData);
   const yearOption = ["I year", "II year", "III year", "IV year"];
   const sectionOption = ["A", "B", "C", "D"];
-  //const departments = ["CSE", "ECE", "ME"];
 
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-      ...(name === "tutor" && { tutorEmail: tutorData[value] || "" }),
-      ...(name === "yearIncharge" && {inchargeEmail: inchargeData[value] || ""})
-    }));
-    console.log(formData)
-  };
+    
+    setFormData((prev) => {
+      const updatedData = {
+        ...prev,
+        [name]: value,
+      };
+      if (name === "tutor") {
+        updatedData.tutorEmail = tutorData[value] || "";
+      }
+      if (name === "yearIncharge") {
+        updatedData.inchargeEmail = inchargeData[value] || "";
+      }
+      console.log(updatedData); 
+      return updatedData;
+    });
+  }, []);
+  
 
   const handleNext = (e) => {
     e.preventDefault();
     const queryString = new URLSearchParams(formData).toString();
     router.push(`/letter?${queryString}`);
   };
-
+  
+  
   return (
-    <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl text-black">
-      <h2 className="text-3xl font-bold mb-8 text-center">Bonafide Certificate Form</h2>
+    <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-lg text-black">
+      <h2 className="text-4xl font-bold mb-8 text-center text-blue-700">Bonafide Certificate Form</h2>
 
       <form className="space-y-6" onSubmit={handleNext}>
         {Object.entries({
           studentName: "Student Name",
-          regNo: "Registration Number",
+          studentRegNo: "Registration Number",
           father: "Father's Name",
           academicYear: "Academic Year",
         }).map(([name, placeholder]) => (
-          <input
-            key={name}
-            name={name}
-            placeholder={placeholder}
-            value={formData[name]}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg"
-            required
-          />
+          <div key={name}>
+            <label htmlFor={name} className="block mb-2 font-medium">
+              {placeholder}
+            </label>
+            <input
+              id={name}
+              name={name}
+              placeholder={placeholder}
+              value={formData[name]}
+              onChange={handleChange}
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
         ))}
 
         {[
@@ -86,37 +98,47 @@ export default function Page() {
           ["year", yearOption],
           ["section", sectionOption],
           ["yearIncharge", yearIncharges],
-          //["department", departments],
         ].map(([name, options]) => (
-          <select
-            key={name}
-            name={name}
-            value={formData[name]}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg"
-            required
-          >
-            <option value="">Select {name.charAt(0).toUpperCase() + name.slice(1)}</option>
-            {options.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+          <div key={name}>
+            <label htmlFor={name} className="block mb-2 font-medium">
+              {name.charAt(0).toUpperCase() + name.slice(1)}
+            </label>
+            <select
+              id={name}
+              name={name}
+              value={formData[name]}
+              onChange={handleChange}
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              required
+            >
+              <option value="">Select {name.charAt(0).toUpperCase() + name.slice(1)}</option>
+              {options.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
         ))}
 
-        <textarea
-          name="reason"
-          placeholder="Reason for applying bonafide"
-          value={formData.reason}
-          onChange={handleChange}
-          className="w-full p-3 border rounded-lg"
-          required
-        />
+        <div>
+          <label htmlFor="reason" className="block mb-2 font-medium">
+            Reason for applying bonafide
+          </label>
+          <textarea
+            id="reason"
+            name="reason"
+            placeholder="Reason for applying bonafide"
+            value={formData.reason}
+            onChange={handleChange}
+            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
 
         <button
           type="submit"
-          className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full"
+          className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full cursor-pointer transition-all duration-300"
         >
           Next
         </button>

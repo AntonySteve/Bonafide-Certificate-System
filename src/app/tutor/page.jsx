@@ -24,7 +24,7 @@ export default function TutorPage() {
 
         const data = await response.json();
         setTutors(data.tutors || []);
-        console.log(tutors)
+        console.log(tutors);
       } catch (err) {
         console.error('Error fetching tutors:', err);
         setError('Failed to load tutors');
@@ -76,56 +76,37 @@ export default function TutorPage() {
   }
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="container mx-auto p-6 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">Tutor Requests</h1>
       {tutors.length === 0 ? (
-        <p>No tutors found.</p>
+        <p className="text-center text-xl text-gray-600">No Requests found.</p>
       ) : (
         tutors.map((tutor) => (
           <div
             key={tutor._id}
-            className="flex justify-evenly items-center"
-            style={{
-              border: '1px solid #ccc',
-              borderRadius: '12px',
-              padding: '20px',
-              marginBottom: '20px',
-              boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-              backgroundColor: '#696969',
-            }}
+            className="flex justify-between items-center bg-white rounded-lg shadow-lg p-6 mb-6"
           >
-            <p className="text-white">
-              <strong>Name:</strong> {tutor.studentName}
-            </p>
-            <p className="text-white">
-              <strong>Register No:</strong> {tutor.regNo}
-            </p>
-            <p className="text-white">
-              <strong>Reason:</strong> {tutor.reason}
-            </p>
-    
-            <div style={{ marginTop: '10px' }}>
+            <div className="flex flex-col">
+              <p className="text-lg text-gray-800">
+                <strong>Name:</strong> {tutor.studentName}
+              </p>
+              <p className="text-lg text-gray-800">
+                <strong>Register No:</strong> {tutor.regNo}
+              </p>
+              <p className="text-lg text-gray-800">
+                <strong>Reason:</strong> {tutor.reason}
+              </p>
+            </div>
+            <div className="flex gap-4">
               <button
                 onClick={() => handleAccept(tutor)}
-                style={{
-                  marginRight: '10px',
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  backgroundColor: '#4CAF50',
-                  color: 'white',
-                }}
+                className="px-6 py-2 bg-green-500 text-white rounded-lg cursor-pointer hover:bg-green-600 transition duration-200"
               >
                 Accept
               </button>
               <button
                 onClick={() => handleDecline(tutor._id)}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  backgroundColor: '#f44336',
-                  color: 'white',
-                }}
+                className="px-6 py-2 bg-red-500 text-white rounded-lg cursor-pointer hover:bg-red-600 transition duration-200"
               >
                 Decline
               </button>

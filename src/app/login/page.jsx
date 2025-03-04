@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
@@ -6,64 +7,99 @@ import { setUser } from '@/lib/userSlice';
 
 export default function Login() {
   const dispatch = useDispatch();
-  const [data, setData] = useState({
-    email: '',
-    password: ''
-  });
-  const tutors = ["tutora@psnacet.edu.in", "tutorb@psnacet.edu.in", "tutorc@psnacet.edu.in", "tutord@psnacet.edu.in"]
-  const [error, setError] = useState('');
   const router = useRouter();
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setData({ ...data, [name]: value });
-    console.log(data)
+
+  const [data, setData] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const userRoles = {
+    hod: 'hod@psnacet.edu.in',
+    incharges: [
+      'year1@psnacet.edu.in',
+      'year2@psnacet.edu.in',
+      'year3@psnacet.edu.in',
+      'year4@psnacet.edu.in',
+    ],
+    tutors: [
+      'tutora@psnacet.edu.in',
+      'tutorb@psnacet.edu.in',
+      'tutorc@psnacet.edu.in',
+      'tutord@psnacet.edu.in',
+    ],
   };
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    router.push('/sign-up');
-  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleNavigation = (email) => {
+    if (email === userRoles.hod) {
+      router.push('/hod');
+    } else if (userRoles.incharges.includes(email)) {
+      router.push('/incharge');
+    } else if (userRoles.tutors.includes(email)) {
+      router.push('/tutor');
+    } else {
+      router.push('/student');
+    }
+  };
 
   const handleSignIn = async (e) => {
     e.preventDefault();
+
     if (!data.email.endsWith('@psnacet.edu.in')) {
       setError('Only @psnacet.edu.in emails are allowed.');
       return;
     }
+
+    setError('');
+    setLoading(true);
+
     try {
       const response = await fetch('/api/signin', {
         method: 'POST',
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-      const result = await response.json();
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
 
-      console.log(result);
-      dispatch(setUser(result.user));
-      if (result.user && tutors.includes(result.user.email)) {
-        router.push('/tutor');
-      } else {
-        router.push('/student');
+      if (!response.ok) {
+        throw new Error('Invalid credentials. Please try again.');
       }
 
-    } catch (error) {
-      console.log(error)
+      const result = await response.json();
+
+      if (!result.user) {
+        throw new Error('User not found. Please check your credentials.');
+      }
+
+      dispatch(setUser(result.user));
+      handleNavigation(result.user.email);
+    } catch (err) {
+      setError(err.message || 'An unexpected error occurred.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 text-black">
-      <form className="bg-white p-8 rounded-2xl shadow-lg max-w-sm w-full">
+      <form className="bg-white p-8 rounded-2xl shadow-lg max-w-sm w-full" onSubmit={handleSignIn}>
         {/* Logo */}
         <div className="flex justify-center mb-6">
-          <img src="https://www.wemakescholars.com/admin/uploads/providers/dXALXBZDSIJRjYu-lFo5oZXxQRcmrfw9.webp" alt="Logo" className="w-40 h-40" />
+          <img
+            src="https://www.wemakescholars.com/admin/uploads/providers/dXALXBZDSIJRjYu-lFo5oZXxQRcmrfw9.webp"
+            alt="Logo"
+            className="w-40 h-40"
+          />
         </div>
 
         {/* Email Input */}
         <div className="mb-4">
-          <label htmlFor="email" className="block mb-2 font-semibold">Email</label>
+          <label htmlFor="email" className="block mb-2 font-semibold">
+            Email
+          </label>
           <input
             type="text"
             id="email"
@@ -72,12 +108,15 @@ export default function Login() {
             value={data.email}
             onChange={handleChange}
             className="w-full p-2 border rounded placeholder-gray"
+            required
           />
         </div>
 
         {/* Password Input */}
         <div className="mb-4">
-          <label htmlFor="password" className="block mb-2 font-semibold">Password</label>
+          <label htmlFor="password" className="block mb-2 font-semibold">
+            Password
+          </label>
           <input
             type="password"
             id="password"
@@ -86,6 +125,7 @@ export default function Login() {
             value={data.password}
             onChange={handleChange}
             className="w-full p-2 border rounded placeholder-gray"
+            required
           />
         </div>
 
@@ -94,16 +134,23 @@ export default function Login() {
 
         {/* Sign In Button */}
         <button
-          onClick={handleSignIn}
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 cursor-pointer"
+          type="submit"
+          className={`w-full p-2 rounded text-white ${loading ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'} cursor-pointer transition duration-200`}
+          disabled={loading}
         >
-          Sign In
+          {loading ? 'Signing In...' : 'Sign In'}
         </button>
 
         {/* Sign Up Link */}
         <div className="mt-4 text-center">
           <p>Don't have an account?</p>
-          <button className="text-blue-600 hover:underline cursor-pointer" onClick={handleClick}>Sign Up</button>
+          <button
+            type="button"
+            className="text-blue-600 hover:underline cursor-pointer"
+            onClick={() => router.push('/sign-up')}
+          >
+            Sign Up
+          </button>
         </div>
       </form>
     </div>
