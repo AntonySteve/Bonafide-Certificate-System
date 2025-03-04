@@ -37,33 +37,30 @@ export default function HodPage() {
 
   const handleAccept = async (hodRequest) => {
     try {
-      const response = await fetch('/api/hod', {
-        method: 'POST',
+      await fetch('/api/hoddelete', {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          studentName: hodRequest.studentName,
-          regNo: hodRequest.regNo,
-          tutorName: hodRequest.tutorName,
-          inchargeName: hodRequest.inchargeName,
-          reason: hodRequest.reason,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to accept HOD request');
-      }
-      alert('HOD request accepted successfully');
-      setHod((prevHod) => prevHod.filter((i) => i._id !== hodRequest._id));
+        body: JSON.stringify({postId : hodRequest._id}),
+      })
     } catch (error) {
-      console.error('Error accepting HOD request:', error);
-      alert('Failed to accept HOD request');
+      console.log(error)
     }
   };
 
-  const handleDecline = (id) => {
-    setHod((prevHod) => prevHod.filter((i) => i._id !== id));
-    console.log('Declined HOD request with ID:', id);
+  const handleDecline = async (hodRequest) => {
+    try {
+      await fetch('/api/hoddelete', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({postId : hodRequest._id})
+      })
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   if (loading) {
