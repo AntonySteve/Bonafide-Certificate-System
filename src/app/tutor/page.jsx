@@ -75,6 +75,20 @@ export default function TutorPage() {
       { postid: tutor._id },
       ''
     );
+
+    handleRequest(
+      '/api/sendEmail',
+      'POST',
+      {
+        studentName: tutor.studentName,
+        studentRegNo: tutor.studentRegNo,
+        tutorName: tutor.tutorName,
+        inchargeName: tutor.yearIncharge,
+        inchargeEmail: tutor.inchargeEmail,
+        reason: tutor.reason,
+      },
+      'Email sent successfully!'
+    );
   };
 
   const handleDecline = (id) => {
