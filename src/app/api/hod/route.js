@@ -5,10 +5,10 @@ import Hod from "@/lib/models/hodSchema";
 export const POST = async (req, res) => {
     await connectDB();
     try {
-        const {studentName, regNo, tutorName, inchargeName, reason} = await req.json();
+        const {studentName, studentRegNo, tutorName, inchargeName, reason} = await req.json();
         const newRequest = await Hod.create({
             studentName,
-            regNo,
+            studentRegNo,
             tutorName,
             inchargeName,
             reason

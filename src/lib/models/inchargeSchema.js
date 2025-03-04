@@ -5,7 +5,7 @@ const inchargeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    regNo:{
+    studentRegNo:{
         type: String,
         required: true,
     },

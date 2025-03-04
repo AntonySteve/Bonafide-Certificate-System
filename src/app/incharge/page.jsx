@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
 export default function InchargePage() {
@@ -9,69 +9,86 @@ export default function InchargePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchIncharge = async () => {
-      try {
-        const response = await fetch(`/api/inchargefetch?email=${user?.email}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch tutors');
-        }
+  const fetchIncharge = useCallback(async () => {
+    if (!user?.email) return;
 
-        const data = await response.json();
-        setIncharges(data.incharges || []);
-      } catch (err) {
-        console.error('Error fetching tutors:', err);
-        setError('Failed to load tutors');
-      } finally {
-        setLoading(false);
+    try {
+      const response = await fetch(`/api/inchargefetch?email=${user.email}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch incharges');
       }
-    };
 
-    if (user?.email) fetchIncharge();
+      const data = await response.json();
+      setIncharges(data.incharges || []);
+    } catch (err) {
+      console.error('Error fetching incharges:', err);
+      setError('Failed to load incharges. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   }, [user?.email]);
 
-  const handleAccept = async (incharge) => {
+  useEffect(() => {
+    fetchIncharge();
+  }, [fetchIncharge]);
+
+  const handleRequest = async (url, method, body, successMessage, failureMessage) => {
     try {
-      const response = await fetch('/api/hod', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          studentName: incharge.studentName,
-          regNo: incharge.regNo,
-          tutorName: incharge.tutorName,
-          inchargeName: incharge.inchargeName,
-          reason: incharge.reason,
-        }),
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
       });
-      if (!response.ok) {
-        throw new Error('Failed to accept tutor request');
-      }
-      alert('Tutor request accepted successfully');
-      setIncharges((prevIncharges) => prevIncharges.filter((i) => i._id !== incharge._id));
+
+      if (!response.ok) throw new Error(failureMessage);
+
+      alert(successMessage);
+      fetchIncharge();
     } catch (error) {
-      console.error('Error accepting tutor request:', error);
-      alert('Failed to accept tutor request');
+      console.error(failureMessage, error);
+      alert(failureMessage);
     }
   };
 
-  const handleDecline = (id) => {
-    console.log('Declined tutor with ID:', id);
+  const handleAccept = (incharge) => {
+    handleRequest(
+      '/api/hod',
+      'POST',
+      {
+        studentName: incharge.studentName,
+        studentRegNo: incharge.studentRegNo,
+        tutorName: incharge.tutorName,
+        inchargeName: incharge.inchargeName,
+        reason: incharge.reason,
+      },
+      'Tutor request accepted successfully',
+      'Failed to accept tutor request'
+    );
+    handleRequest(
+      '/api/inchargedelete',
+      'DELETE',
+      { postId: incharge._id },
+      ''
+    );
   };
 
-  if (loading) {
-    return <p>Loading Incharge...</p>;
-  }
+  const handleDecline = (incharge) => {
+    handleRequest(
+      '/api/inchargedelete',
+      'DELETE',
+      { postId : incharge._id },
+      'Tutor request declined successfully',
+      'Failed to decline tutor request'
+    );
+  };
 
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
+  if (loading) return <p>Loading Incharges...</p>;
+
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div style={{ padding: '20px' }}>
@@ -85,7 +102,7 @@ export default function InchargePage() {
           >
             <div className="text-white">
               <p><strong>Name:</strong> {incharge.studentName}</p>
-              <p><strong>Register No:</strong> {incharge.regNo}</p>
+              <p><strong>Register No:</strong> {incharge.studentRegNo}</p>
               <p><strong>Tutor Name:</strong> {incharge.tutorName}</p>
               <p><strong>Reason:</strong> {incharge.reason}</p>
             </div>
@@ -98,7 +115,7 @@ export default function InchargePage() {
                 Accept
               </button>
               <button
-                onClick={() => handleDecline(incharge._id)}
+                onClick={() => handleDecline(incharge)}
                 className="px-6 py-2 rounded-xl cursor-pointer bg-red-600 text-white hover:bg-red-700 transition"
               >
                 Decline

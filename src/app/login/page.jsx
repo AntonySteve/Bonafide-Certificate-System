@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
-import { setUser } from '@/lib/userSlice';
+import { setUser } from '@/lib/store/userSlice';
 
 export default function Login() {
   const dispatch = useDispatch();
