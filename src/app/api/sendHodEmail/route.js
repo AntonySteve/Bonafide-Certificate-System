@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 
 export async function POST(req) {
   try {
-    const { studentName, studentRegNo, tutorName, inchargeName, inchargeEmail, reason } = await req.json();
+    const { studentName, studentEmail, studentRegNo, tutorName, inchargeName, reason } = await req.json();
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -17,7 +17,7 @@ export async function POST(req) {
         name: 'Bonafide Certificate',
         address: process.env.USER,
       },
-      to: 'karthik.raja.007c@gmail.com',
+      to: studentEmail,
       subject: 'Tutor Request Accepted',
       html: `
         <h2>Tutor Request Accepted</h2>

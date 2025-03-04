@@ -2,34 +2,36 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function TutorPage() {
   const user = useSelector((state) => state.user);
   const [tutors, setTutors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null);  
+
 
   const fetchTutors = useCallback(async () => {
     if (!user?.email) return;
-
     setLoading(true);
+    setError(null);
     try {
       const response = await fetch(`/api/retrieve?email=${encodeURIComponent(user.email)}`);
-
       if (!response.ok) {
         throw new Error(`Failed to fetch tutors: ${response.statusText}`);
       }
-
       const data = await response.json();
       setTutors(data.tutors || []);
-    } catch (err) {
-      console.error('Error fetching tutors:', err);
+    } catch (error) {
+      console.error('Error fetching tutors:', error);
       setError('Failed to load tutors. Please try again later.');
     } finally {
       setLoading(false);
     }
   }, [user?.email]);
 
+  
   useEffect(() => {
     fetchTutors();
   }, [fetchTutors]);
@@ -43,69 +45,58 @@ export default function TutorPage() {
       });
 
       if (!response.ok) {
-        throw new Error(`Request failed: ${response.statusText}`);
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Request failed.');
       }
 
-      alert(successMessage);
-      fetchTutors(); // Refresh tutor list
+      toast.success(successMessage);
+      fetchTutors();
     } catch (error) {
       console.error('Error processing request:', error);
-      alert('An error occurred. Please try again later.');
+      toast.error(error.message || 'An error occurred. Please try again later.');
     }
   };
 
   const handleAccept = (tutor) => {
-    handleRequest(
-      '/api/incharge',
-      'POST',
-      {
-        studentName: tutor.studentName,
-        studentRegNo: tutor.studentRegNo,
-        tutorName: tutor.tutorName,
-        inchargeName: tutor.yearIncharge,
-        inchargeEmail: tutor.inchargeEmail,
-        reason: tutor.reason,
-      },
-      'Tutor request accepted successfully'
-    );
+    const payload = {
+      studentName: tutor.studentName,
+      studentRegNo: tutor.studentRegNo,
+      studentEmail: tutor.studentEmail,
+      tutorName: tutor.tutorName,
+      inchargeName: tutor.yearIncharge,
+      inchargeEmail: tutor.inchargeEmail,
+      reason: tutor.reason,
+    };
 
-    handleRequest(
-      '/api/tutordelete',
-      'DELETE',
-      { postid: tutor._id },
-      ''
-    );
-
-    handleRequest(
-      '/api/sendEmail',
-      'POST',
-      {
-        studentName: tutor.studentName,
-        studentRegNo: tutor.studentRegNo,
-        tutorName: tutor.tutorName,
-        inchargeName: tutor.yearIncharge,
-        inchargeEmail: tutor.inchargeEmail,
-        reason: tutor.reason,
-      },
-      'Email sent successfully!'
-    );
+    handleRequest('/api/incharge', 'POST', payload, 'Tutor request accepted successfully.');
+    handleRequest('/api/tutordelete', 'DELETE', { postid: tutor._id }, 'Request removed.');
+    handleRequest('/api/sendTutorEmail', 'POST', {
+      ...payload,
+      studentEmail: tutor.studentEmail,
+    }, 'Email sent successfully.');
   };
 
   const handleDecline = (id) => {
-    handleRequest(
-      '/api/tutordelete',
-      'DELETE',
-      { postid: id },
-      'Tutor request declined successfully'
-    );
+    handleRequest('/api/tutordelete', 'DELETE', { postid: id }, 'Tutor request declined successfully.');
   };
 
-  if (loading) return <p>Loading tutors...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <p className="text-center text-xl text-gray-600">Loading tutors...</p>;
 
   return (
     <div className="container mx-auto p-6 bg-gray-50 min-h-screen">
       <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">Tutor Requests</h1>
+
+      {error && (
+        <div className="mb-4 p-4 bg-red-100 text-red-800 rounded-lg shadow">
+          {error}
+          <button
+            onClick={fetchTutors}
+            className="ml-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
+          >
+            Retry
+          </button>
+        </div>
+      )}
 
       {tutors.length === 0 ? (
         <p className="text-center text-xl text-gray-600">No Requests found.</p>

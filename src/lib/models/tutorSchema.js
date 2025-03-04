@@ -9,6 +9,10 @@ const tutorSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    studentEmail : {
+        type: String,
+        required: true
+    },
     tutorName:{
         type: String,
         required: true

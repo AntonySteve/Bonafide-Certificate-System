@@ -12,7 +12,8 @@ const BonafideLetter = () => {
 
   const formData = {
     studentName: searchParams.get("studentName"),
-    regNo: searchParams.get("studentRegNo"),
+    studentRegNo: searchParams.get("studentRegNo"),
+    studentEmail: searchParams.get("studentEmail"),
     tutorName: searchParams.get("tutor"),
     tutorEmail: searchParams.get("tutorEmail"),
     reason: searchParams.get("reason"),
@@ -20,8 +21,8 @@ const BonafideLetter = () => {
     section: searchParams.get("section"),
     yearIncharge: searchParams.get("yearIncharge"),
     inchargeEmail: searchParams.get("inchargeEmail"),
-    department: searchParams.get("department"),
     academicYear: searchParams.get("academicYear"),
+    fatherName: searchParams.get("father"),
   };
 
   const father = {
@@ -39,6 +40,7 @@ const BonafideLetter = () => {
       });
       const res = await response.json();
       console.log(res);
+      router.push("/Sprogress");
     } catch (error) {
       console.error("Error sending file:", error);
     }
@@ -61,7 +63,7 @@ const BonafideLetter = () => {
           <img
             src="kothandaraman.jpeg"
             alt="Founder of PSNACET"
-            className="w-30 h-40 cursor-pointer"
+            className="w-30 h-40 "
           />
         </div>
         <h2 className="text-2xl font-bold text-center mb-4">Bonafide Certificate</h2>

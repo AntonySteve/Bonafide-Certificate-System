@@ -18,13 +18,6 @@ export async function GET(req) {
 
     console.log("Fetching tutors for email:", email);
     const incharges = await Incharge.find({ inchargeEmail: email });
-
-    if (!incharges.length) {
-      return new Response(JSON.stringify({ message: "No incharge found" }), {
-        status: 404,
-      });
-    }
-    console.log(incharges)
     return new Response(JSON.stringify({ incharges }), {
       status: 200,
       headers: { "Content-Type": "application/json" },

@@ -2,13 +2,16 @@
 
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "@/lib/store/userSlice";
 
 export default function Page() {
   const router = useRouter();
-
+   const user = useSelector((state) => state.user);
   const [formData, setFormData] = useState({
     studentName: "",
     studentRegNo: "",
+    studentEmail: user?.email,
     father: "",
     tutor: "",
     tutorEmail: "",
@@ -61,6 +64,10 @@ export default function Page() {
 
   const handleNext = (e) => {
     e.preventDefault();
+    if(!user)
+    {
+      router.push('/login');
+    }
     const queryString = new URLSearchParams(formData).toString();
     router.push(`/letter?${queryString}`);
   };

@@ -7,8 +7,11 @@ const hodSchema = new mongoose.Schema({
     },
     studentRegNo : {
         type: String,
-        required: true,
-        
+        required: true, 
+    },
+    studentEmail : {
+        type: String,
+        required: true
     },
     tutorName:{
         type: String,
