@@ -79,7 +79,7 @@ const BonafideLetter = () => {
         This Certificate is issued to him/her for applying to the <strong>{formData.reason}</strong>.
       </p>
 
-      <p className="mt-6 text-right font-bold">HOD-{formData.department}</p>
+      <p className="mt-6 text-right font-bold">HOD-CSE</p>
 
       {/* <button onClick={downloadImage} className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full mt-4">
         Download as Image
