@@ -55,13 +55,13 @@ const BonafideLetter = () => {
             <img
               src="https://psnacet.edu.in/img-1/logo-clr.png"
               alt="College Logo"
-              className="mb-5 mx-auto ml-0 mt-5"
+              className="mb-5 mx-auto ml-0 mt-5 cursor-pointer"
             />
           </div>
           <img
             src="kothandaraman.jpeg"
-            alt="Founder"
-            className="w-30 h-40"
+            alt="Founder of PSNACET"
+            className="w-30 h-40 cursor-pointer"
           />
         </div>
         <h2 className="text-2xl font-bold text-center mb-4">Bonafide Certificate</h2>
