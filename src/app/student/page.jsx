@@ -61,6 +61,22 @@ export default function Page() {
     });
   }, []);
   
+  const sendFile = async () => {
+    try {
+      const response = await fetch("/api/send-file", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const res = await response.json();
+      console.log(res);
+      router.push("/Sprogress");
+    } catch (error) {
+      console.error("Error sending file:", error);
+    }
+  };
 
   const handleNext = (e) => {
     e.preventDefault();
@@ -75,11 +91,11 @@ export default function Page() {
   
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-lg text-black flex-col">
-      <div>
+      {/* <div>
         <button className="bg-green-400 w-25 h-10 rounded-full cursor-pointer hover:bg-green-500">
           Progress
         </button>
-      </div>
+      </div> */}
       <h2 className="text-4xl font-bold mb-8 text-center text-blue-700">Bonafide Certificate Form</h2>
 
       <form className="space-y-6" onSubmit={handleNext}>
@@ -149,10 +165,10 @@ export default function Page() {
         </div>
 
         <button
-          type="submit"
-          className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full cursor-pointer transition-all duration-300"
+          onClick={sendFile}
+          className="bg-blue-600  text-white p-3 rounded-lg hover:bg-blue-800 w-full cursor-pointer transition-all duration-300"
         >
-          Next
+          Send
         </button>
       </form>
     </div>

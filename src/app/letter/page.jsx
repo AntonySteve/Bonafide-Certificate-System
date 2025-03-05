@@ -29,22 +29,6 @@ const BonafideLetter = () => {
     fatherName: searchParams.get("father"),
   };
 
-  const sendFile = async () => {
-    try {
-      const response = await fetch("/api/send-file", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      const res = await response.json();
-      console.log(res);
-      router.push("/Sprogress");
-    } catch (error) {
-      console.error("Error sending file:", error);
-    }
-  };
 
   return (
     <div className="max-w-3xl mx-auto bg-white shadow-lg text-black relative border-4 border-white mt-10">
@@ -87,12 +71,12 @@ const BonafideLetter = () => {
         <p className="mt-6 text-right font-bold mr-5">HOD-CSE</p>
       </div>
 
-      <button
+      {/* <button
         onClick={sendFile}
         className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-800 w-30 mt-4 cursor-pointer"
       >
         Send
-      </button>
+      </button> */}
     </div>
   );
 };
