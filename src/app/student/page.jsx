@@ -163,7 +163,11 @@ export default function Page() {
         </div>
 
         <button
+<<<<<<< HEAD
           onClick={handleNext}
+=======
+          type="submit"
+>>>>>>> e42b5ca4977371469cdb153dd324e7c562c0c33a
           className="bg-blue-600  text-white p-3 rounded-lg hover:bg-blue-800 w-full cursor-pointer transition-all duration-300"
         >
           Next
