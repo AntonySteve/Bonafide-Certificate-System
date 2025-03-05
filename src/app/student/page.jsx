@@ -3,11 +3,12 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser } from "@/lib/store/userSlice";
+import Loader from "@/components/ui/loader";
 
 export default function Page() {
   const router = useRouter();
-   const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
+
   const [formData, setFormData] = useState({
     studentName: "",
     studentRegNo: "",
@@ -60,8 +61,10 @@ export default function Page() {
       return updatedData;
     });
   }, []);
+
+  //if(loading) return <Loader className="flex items-center justify-center"/>
   
-  const sendFile = async () => {
+  /*const sendFile = async () => {
     try {
       const response = await fetch("/api/send-file", {
         method: "POST",
@@ -76,7 +79,7 @@ export default function Page() {
     } catch (error) {
       console.error("Error sending file:", error);
     }
-  };
+  };*/
 
   const handleNext = (e) => {
     e.preventDefault();
@@ -160,10 +163,10 @@ export default function Page() {
         </div>
 
         <button
-          onClick={sendFile}
+          onClick={handleNext}
           className="bg-blue-600  text-white p-3 rounded-lg hover:bg-blue-800 w-full cursor-pointer transition-all duration-300"
         >
-          Send
+          Next
         </button>
       </form>
     </div>

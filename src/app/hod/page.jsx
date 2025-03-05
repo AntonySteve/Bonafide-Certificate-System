@@ -9,7 +9,10 @@ export default function HodPage() {
   const [hod, setHod] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [declineReason, setDeclineReason] = useState('');
+  const [showDeclineInput, setShowDeclineInput] = useState(null);
 
+  
   const fetchHod = useCallback(async () => {
     if (!user?.email) return;
 
@@ -66,21 +69,28 @@ export default function HodPage() {
       reason: hodRequest.reason,
       fatherName: hodRequest.fatherName
     };
-    handleRequest('/api/sendHodEmail', 'POST', {
-      ...payload,
-      studentEmail: hodRequest.studentEmail,
-    }, 'Email sent successfully.');
+    handleRequest('/api/sendHodEmail', 'POST', payload, 'Email sent successfully.');
     handleRequest('/api/hoddelete', 'DELETE', { postId: hodRequest._id }, '');
   };
 
   const handleDecline = (hodRequest) => {
-    handleRequest(
-      '/api/hoddelete',
-      'DELETE',
-      { postId: hodRequest._id },
-      'Request declined successfully.',
-      'Failed to decline the request.'
-    );
+    if (!declineReason) return alert('Please provide a reason for declining.');
+
+    const declinePayload = {
+      studentName: hodRequest.studentName,
+      studentEmail: hodRequest.studentEmail,
+      studentRegNo: hodRequest.studentRegNo,
+      year: hodRequest.year,
+      academicYear: hodRequest.academicYear,
+      inchargeName: hodRequest.inchargeName,
+      reason: declineReason,
+    };
+
+    handleRequest('/api/sendHodDeclineEmail', 'POST', declinePayload, 'Decline email sent successfully.', 'Failed to send decline email.');
+    handleRequest('/api/hoddelete', 'DELETE', { postId: hodRequest._id }, 'Request declined successfully.', 'Failed to decline the request.');
+
+    setShowDeclineInput(null);
+    setDeclineReason('');
   };
 
   if (loading) return <Loader message="Loading HOD requests..." />;
@@ -105,19 +115,36 @@ export default function HodPage() {
                 <p className="text-gray-600">Tutor: {hodRequest.tutorName}</p>
                 <p className="text-gray-600">Incharge: {hodRequest.inchargeName}</p>
                 <p className="text-gray-600 mt-2">Reason: {hodRequest.reason}</p>
+
+                {showDeclineInput === hodRequest._id && (
+                  <div className="mt-4">
+                    <textarea
+                      placeholder="Enter reason for decline"
+                      value={declineReason}
+                      onChange={(e) => setDeclineReason(e.target.value)}
+                      className="w-full p-2 border rounded-lg"
+                    />
+                    <button
+                      onClick={() => handleDecline(hodRequest)}
+                      className="mt-2 px-6 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
+                    >
+                      Submit Decline Reason
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="flex gap-4">
                 <button
                   onClick={() => handleAccept(hodRequest)}
-                  className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
                 >
                   Accept
                 </button>
 
                 <button
-                  onClick={() => handleDecline(hodRequest)}
-                  className="px-6 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:outline-none"
+                  onClick={() => setShowDeclineInput(hodRequest._id)}
+                  className="px-6 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
                 >
                   Decline
                 </button>

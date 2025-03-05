@@ -9,10 +9,9 @@ export async function POST(req) {
       studentName,
       studentRegNo,
       studentEmail,
-      year,
       academicYear,
-      fatherName,
-      reason
+      reason,
+      fatherName
     } = await req.json();
 
     // Canvas dimensions (A4 size ratio)
@@ -29,60 +28,63 @@ export async function POST(req) {
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, width, height);
 
-    // Green line (Top border)
+    // Green Line (Top-Left to Center)
     ctx.fillStyle = '#16A34A';
-    ctx.fillRect(0, 0, width, 15);
+    ctx.fillRect(0, 5, width / 2, 20); // Starts from left, extends to center
 
-    // Header (Logo & Founder Image)
-    ctx.drawImage(logo, 50, 50, 250, 100); // College Logo (left side)
-    ctx.drawImage(founderImage, width - 200, 50, 150, 150); // Founder Image (right side)
+    // Logo & Founder Image (Top-Right)
+    const logoWidth = 150, logoHeight = 150;
+    const founderWidth = 150, founderHeight = 180;
+    const marginTop = 5;
+    const logoX = width - (logoWidth + founderWidth + 20); // Right-aligned
+    const founderX = width - (founderWidth + 10); // Next to logo
 
-    // College Name & Details
+    ctx.drawImage(logo, logoX, marginTop, logoWidth, logoHeight);
+    ctx.drawImage(founderImage, founderX, marginTop, founderWidth, founderHeight);
+
+    // College Name (Centered)
     ctx.fillStyle = '#003366';
-    ctx.font = 'bold 38px Arial';
+    ctx.font = 'bold 54px Georgia';
     ctx.textAlign = 'center';
-    ctx.fillText('PSNA College of Engineering & Technology', width / 2, 200);
-    ctx.font = 'italic 24px Arial';
-    ctx.fillText('(An Autonomous Institution)', width / 2, 240);
-    ctx.font = '20px Arial';
-    ctx.fillText('AICTE | Anna University | NBA | NAAC A++', width / 2, 270);
+    ctx.fillText('PSNA College of Engineering and Technology', width / 2, 350);
 
-    // Certificate Title
+    // Certificate Title (Centered)
     ctx.fillStyle = '#000000';
-    ctx.font = 'bold 42px Times New Roman';
-    ctx.fillText('Bonafide Certificate', width / 2, 350);
+    ctx.font = 'bold 48px Times New Roman';
+    ctx.fillText('Bonafide Certificate', width / 2, 450);
 
-    // Subtitle
-    ctx.font = 'italic 28px Times New Roman';
-    ctx.fillText('To whomsoever it may concern', width / 2, 400);
+    // Subtitle (Centered)
+    ctx.font = 'italic 32px Times New Roman';
+    ctx.fillText('To Whomsoever It May Concern', width / 2, 520);
 
-    // Certificate Content
+    // Certificate Content (Centered)
     ctx.fillStyle = '#222222';
-    ctx.font = '26px Times New Roman';
-    ctx.textAlign = 'left';
+    ctx.font = '28px Times New Roman';
+    ctx.textAlign = 'center';
+
     const content = `This is to certify that Mr./Ms. ${studentName} (Reg No: ${studentRegNo}),
-    S/o or D/o of ${fatherName}, is a student of our institution, currently enrolled
-    in the BE. Computer Science Engineering during the academic year ${academicYear}.`;
-    
+      S/o or D/o of ${fatherName}, is a student of our institution,
+      currently enrolled in the BE. Computer Science Engineering
+      during the academic year ${academicYear}.`;
+
     const lines = content.split('\n');
-    let yPosition = 500;
+    let yPosition = 620;
     lines.forEach((line) => {
-      ctx.fillText(line.trim(), 100, yPosition);
-      yPosition += 50;
+      ctx.fillText(line.trim(), width / 2, yPosition);
+      yPosition += 60;
     });
 
-    // Reason for certificate
-    ctx.font = 'bold 26px Times New Roman';
-    ctx.fillText(`This Certificate is issued for the purpose of ${reason}.`, 100, yPosition + 40);
+    // Reason for certificate (Centered) - Fixed Quotes Error Here
+    ctx.font = '28px Times New Roman';
+    ctx.fillText(`This Certificate is issued for the purpose of: ${reason}`, width / 2, yPosition + 40);
 
-    // Signature & Footer
-    ctx.font = 'bold 28px Times New Roman';
-    ctx.textAlign = 'right';
-    ctx.fillText('HOD-CSE', width - 100, height - 120);
+    // Signature & Footer (Centered)
+    ctx.font = 'bold 32px Times New Roman';
+    ctx.fillText('HOD-CSE', width / 2, height - 120);
 
-    // Green line (Bottom border)
+    // Bottom Green Line (Center to Right)
     ctx.fillStyle = '#16A34A';
-    ctx.fillRect(0, height - 15, width, 15);
+    ctx.fillRect(width / 2, height - 20, width / 2, 20); // From center to right
 
     // Save the image to a temporary path
     const imagePath = path.join('/tmp', 'bonafide_certificate.png');
@@ -98,26 +100,19 @@ export async function POST(req) {
       },
     });
 
-    // Email Content with Attachment
-    // Email Content with Attachment
-      const mailOptions = {
-        from: `Bonafide Certificate <${process.env.USER}>`,
-        to: studentEmail,
-        subject: 'Your Bonafide Certificate',
-        text: `Dear ${studentName},
-
-          Please find your Bonafide Certificate attached.
-
-          Best regards,
-          PSNA College of Engineering and Technology`,
-        attachments: [
-          {
-            filename: 'bonafide_certificate.png',
-            path: imagePath,
-          },
-        ],
-      };
-
+    // Email Content with Attachment - Fixed Quotes and Template Literals Here
+    const mailOptions = {
+      from: `Bonafide Certificate <${process.env.USER}>`,
+      to: studentEmail,
+      subject: 'Your Bonafide Certificate',
+      text: `Dear ${studentName},\n\nPlease find your Bonafide Certificate attached.\n\nBest regards,\nPSNA College of Engineering and Technology`,
+      attachments: [
+        {
+          filename: 'bonafide_certificate.png',
+          path: imagePath,
+        },
+      ],
+    };
 
     // Send the email
     await transporter.sendMail(mailOptions);

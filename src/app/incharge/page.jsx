@@ -2,12 +2,17 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import Loader from '@/components/ui/loader';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function InchargePage() {
   const user = useSelector((state) => state.user);
   const [incharges, setIncharges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [declineReason, setDeclineReason] = useState({});
+  const [showReasonInput, setShowReasonInput] = useState(null);
 
   const fetchIncharge = useCallback(async () => {
     if (!user?.email) return;
@@ -44,13 +49,15 @@ export default function InchargePage() {
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) throw new Error(failureMessage);
+      if (!response.ok) {
+        throw new Error('Request failed.');
+      }
 
-      alert(successMessage);
+      toast.success(successMessage);
       fetchIncharge();
     } catch (error) {
-      console.error(failureMessage, error);
-      alert(failureMessage);
+      console.error('Error processing request:', error);
+      toast.error('An error occurred. Please try again later.');
     }
   };
 
@@ -64,27 +71,39 @@ export default function InchargePage() {
       tutorName: incharge.tutorName,
       inchargeName: incharge.inchargeName,
       reason: incharge.reason,
-      fatherName: incharge.fatherName
+      fatherName: incharge.fatherName,
     };
-    handleRequest('/api/hod','POST', payload, 'Request accepted successfully.');
+
+    handleRequest('/api/hod', 'POST', payload, 'Request accepted successfully.');
     handleRequest('/api/inchargedelete', 'DELETE', { postId: incharge._id }, '');
-    handleRequest('/api/sendInchargeEmail', 'POST', {
-      ...payload,
-      studentEmail: incharge.studentEmail,
-    }, 'Email sent successfully.');
+    handleRequest('/api/sendInchargeEmail', 'POST', payload, 'Email sent successfully.');
   };
 
   const handleDecline = (incharge) => {
-    handleRequest(
-      '/api/inchargedelete',
-      'DELETE',
-      { postId: incharge._id },
-      'Request declined successfully.',
-      'Failed to decline the request.'
-    );
+    if (!declineReason[incharge._id]) {
+      toast.error('Please enter a reason for declining.');
+      return;
+    }
+
+    const payload = {
+      studentName: incharge.studentName,
+      studentRegNo: incharge.studentRegNo,
+      studentEmail: incharge.studentEmail,
+      year: incharge.year,
+      academicYear: incharge.academicYear,
+      tutorName: incharge.tutorName,
+      inchargeName: incharge.yearIncharge,
+      inchargeEmail: incharge.inchargeEmail,
+      reason: declineReason[incharge._id],
+      fatherName: incharge.fatherName
+    };
+
+    handleRequest('/api/inchargedelete', 'DELETE', { postId: incharge._id }, 'Request declined successfully.');
+    handleRequest('/api/sendInchargeDeclineEmail', 'POST', payload, 'Decline email sent successfully.');
+    setShowReasonInput(null);
   };
 
-  if (loading) return <p className="text-center text-gray-500">Loading Requests...</p>;
+  if (loading) return <Loader className="flex justify-center items-center" />;
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (
@@ -92,7 +111,7 @@ export default function InchargePage() {
       <h1 className="text-3xl font-semibold text-gray-700 mb-8 text-center">Incharge Requests</h1>
 
       {incharges.length === 0 ? (
-        <p className="text-center text-2xl text-semibold text-black">No Incharge requests found.</p>
+        <p className="text-center text-2xl font-semibold text-black">No Incharge requests found.</p>
       ) : (
         <div className="max-w-5xl mx-auto space-y-8">
           {incharges.map((incharge) => (
@@ -116,12 +135,29 @@ export default function InchargePage() {
                 </button>
 
                 <button
-                  onClick={() => handleDecline(incharge)}
+                  onClick={() => setShowReasonInput(incharge._id)}
                   className="px-6 py-2 rounded-lg bg-red-600 text-white cursor-pointer hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:outline-none"
                 >
                   Decline
                 </button>
               </div>
+
+              {showReasonInput === incharge._id && (
+                <div className="mt-4">
+                  <textarea
+                    placeholder="Enter reason for decline"
+                    value={declineReason[incharge._id] || ''}
+                    onChange={(e) => setDeclineReason({ ...declineReason, [incharge._id]: e.target.value })}
+                    className="w-full p-2 border rounded-lg"
+                  />
+                  <button
+                    onClick={() => handleDecline(incharge)}
+                    className="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                  >
+                    Submit Reason
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>

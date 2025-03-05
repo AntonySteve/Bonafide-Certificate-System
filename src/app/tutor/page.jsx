@@ -4,6 +4,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Loader from '@/components/ui/loader';
 
 export default function TutorPage() {
   const user = useSelector((state) => state.user);
@@ -100,7 +101,7 @@ export default function TutorPage() {
     setShowReasonInput(null);
   };
 
-  if (loading) return <p className="text-center text-xl text-gray-600">Loading tutors...</p>;
+  if (loading) return <Loader className="flex justify-center items-center"/>;
 
   return (
     <div className="container mx-auto p-6 bg-gray-50 min-h-screen">

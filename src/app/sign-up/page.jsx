@@ -27,22 +27,6 @@ export default function SignUp() {
     setData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleNavigation = (role) => {
-    switch (role) {
-      case 'hod':
-        router.push('/hod');
-        break;
-      case 'incharge':
-        router.push('/incharge');
-        break;
-      case 'tutor':
-        router.push('/tutor');
-        break;
-      default:
-        router.push('/student');
-    }
-  };
-
   const handleSignUp = async (e) => {
     e.preventDefault();
 
@@ -70,13 +54,13 @@ export default function SignUp() {
       dispatch(setUser(result.user));
 
       if (result.user.email === hod) {
-        handleNavigation('hod');
+        router.push('/hod');
       } else if (incharges.includes(result.user.email)) {
-        handleNavigation('incharge');
+        router.push('/incharge')
       } else if (tutors.includes(result.user.email)) {
-        handleNavigation('tutor');
+        router.push('/tutor');
       } else {
-        handleNavigation('student');
+        router.push('/student')
       }
     } catch (err) {
       setError(err.message);
