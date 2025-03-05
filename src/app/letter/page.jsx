@@ -86,12 +86,12 @@ const BonafideLetter = () => {
         </p>
       </div>
 
-      {/* <button
+      <button
         onClick={sendFile}
         className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-800 w-30 mt-4 cursor-pointer"
       >
         Send
-      </button> */}
+      </button>
     </div>
   );
 };

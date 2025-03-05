@@ -160,10 +160,10 @@ export default function Page() {
         </div>
 
         <button
-          onClick={sendFile}
+          type="submit"
           className="bg-blue-600  text-white p-3 rounded-lg hover:bg-blue-800 w-full cursor-pointer transition-all duration-300"
         >
-          Send
+          Next
         </button>
       </form>
     </div>
