@@ -13,6 +13,14 @@ const inchargeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    year: {
+        type: String,
+        required: true
+    },
+    academicYear: {
+        type: String,
+        required: true
+    },
     tutorName: {
         type: String,
         required: true
@@ -29,7 +37,11 @@ const inchargeSchema = new mongoose.Schema({
             type: String,
             required: true
     },
-    }, { timestamps: true}
+    fatherName: {
+            type: String,
+            required: true
+    }, 
+},{ timestamps: true}
 );
 
 

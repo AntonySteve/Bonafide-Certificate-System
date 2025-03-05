@@ -5,15 +5,18 @@ import connectDB from "@/lib/db/mongodb";
 export const POST = async (req, res) => {
     await connectDB();
     try {
-        const {studentName, studentRegNo, studentEmail, tutorName, inchargeName, inchargeEmail, reason} = await req.json();
+        const {studentName, studentRegNo, studentEmail, year, academicYear, tutorName, inchargeName, inchargeEmail, reason, fatherName} = await req.json();
         const newRequest = await Incharge.create( {
             studentName,
             studentRegNo,
             studentEmail,
+            year,
+            academicYear,
             tutorName,
             inchargeName,
             inchargeEmail,
-            reason
+            reason,
+            fatherName
         });
         await newRequest.save();
         return new Response(JSON.stringify(newRequest), {status: 200})

@@ -9,8 +9,9 @@ export default function TutorPage() {
   const user = useSelector((state) => state.user);
   const [tutors, setTutors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);  
-
+  const [error, setError] = useState(null);
+  const [declineReason, setDeclineReason] = useState({});
+  const [showReasonInput, setShowReasonInput] = useState(null);
 
   const fetchTutors = useCallback(async () => {
     if (!user?.email) return;
@@ -31,7 +32,6 @@ export default function TutorPage() {
     }
   }, [user?.email]);
 
-  
   useEffect(() => {
     fetchTutors();
   }, [fetchTutors]);
@@ -62,22 +62,42 @@ export default function TutorPage() {
       studentName: tutor.studentName,
       studentRegNo: tutor.studentRegNo,
       studentEmail: tutor.studentEmail,
+      year: tutor.year,
+      academicYear: tutor.academicYear,
       tutorName: tutor.tutorName,
       inchargeName: tutor.yearIncharge,
       inchargeEmail: tutor.inchargeEmail,
       reason: tutor.reason,
+      fatherName: tutor.fatherName
     };
 
     handleRequest('/api/incharge', 'POST', payload, 'Tutor request accepted successfully.');
     handleRequest('/api/tutordelete', 'DELETE', { postid: tutor._id }, 'Request removed.');
-    handleRequest('/api/sendTutorEmail', 'POST', {
-      ...payload,
-      studentEmail: tutor.studentEmail,
-    }, 'Email sent successfully.');
+    handleRequest('/api/sendTutorEmail', 'POST', payload, 'Email sent successfully.');
   };
 
-  const handleDecline = (id) => {
-    handleRequest('/api/tutordelete', 'DELETE', { postid: id }, 'Tutor request declined successfully.');
+  const handleDecline = (tutor) => {
+    if (!declineReason[tutor._id]) {
+      toast.error('Please enter a reason for declining.');
+      return;
+    }
+
+    const payload = {
+      studentName: tutor.studentName,
+      studentRegNo: tutor.studentRegNo,
+      studentEmail: tutor.studentEmail,
+      year: tutor.year,
+      academicYear: tutor.academicYear,
+      tutorName: tutor.tutorName,
+      inchargeName: tutor.yearIncharge,
+      inchargeEmail: tutor.inchargeEmail,
+      reason: declineReason[tutor._id],
+      fatherName: tutor.fatherName
+    };
+
+    handleRequest('/api/tutordelete', 'DELETE', { postid: tutor._id }, 'Tutor request declined successfully.');
+    handleRequest('/api/sendTutorDeclineEmail', 'POST', payload, 'Decline email sent successfully.');
+    setShowReasonInput(null);
   };
 
   if (loading) return <p className="text-center text-xl text-gray-600">Loading tutors...</p>;
@@ -104,15 +124,13 @@ export default function TutorPage() {
         tutors.map((tutor) => (
           <div
             key={tutor._id}
-            className="flex justify-between items-center bg-white rounded-lg shadow-lg p-6 mb-6"
+            className="flex flex-col bg-white rounded-lg shadow-lg p-6 mb-6"
           >
-            <div className="flex flex-col">
-              <p className="text-lg text-gray-800"><strong>Name:</strong> {tutor.studentName}</p>
-              <p className="text-lg text-gray-800"><strong>Register No:</strong> {tutor.studentRegNo}</p>
-              <p className="text-lg text-gray-800"><strong>Reason:</strong> {tutor.reason}</p>
-            </div>
+            <p className="text-lg text-gray-800"><strong>Name:</strong> {tutor.studentName}</p>
+            <p className="text-lg text-gray-800"><strong>Register No:</strong> {tutor.studentRegNo}</p>
+            <p className="text-lg text-gray-800"><strong>Reason:</strong> {tutor.reason}</p>
 
-            <div className="flex gap-4">
+            <div className="flex gap-4 mt-4">
               <button
                 onClick={() => handleAccept(tutor)}
                 className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-200"
@@ -120,12 +138,29 @@ export default function TutorPage() {
                 Accept
               </button>
               <button
-                onClick={() => handleDecline(tutor._id)}
+                onClick={() => setShowReasonInput(tutor._id)}
                 className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
               >
                 Decline
               </button>
             </div>
+
+            {showReasonInput === tutor._id && (
+              <div className="mt-4">
+                <textarea
+                  className="w-full p-2 border rounded-lg"
+                  placeholder="Enter reason for declining..."
+                  value={declineReason[tutor._id] || ''}
+                  onChange={(e) => setDeclineReason({ ...declineReason, [tutor._id]: e.target.value })}
+                />
+                <button
+                  onClick={() => handleDecline(tutor)}
+                  className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                >
+                  Submit Reason
+                </button>
+              </div>
+            )}
           </div>
         ))
       )}

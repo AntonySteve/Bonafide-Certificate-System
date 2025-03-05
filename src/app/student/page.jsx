@@ -75,11 +75,7 @@ export default function Page() {
   
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-lg text-black flex-col">
-      <div>
-        <button className="bg-green-400 w-25 h-10 rounded-full cursor-pointer hover:bg-green-500">
-          Progress
-        </button>
-      </div>
+      
       <h2 className="text-4xl font-bold mb-8 text-center text-blue-700">Bonafide Certificate Form</h2>
 
       <form className="space-y-6" onSubmit={handleNext}>

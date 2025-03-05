@@ -13,6 +13,14 @@ const hodSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    year: {
+        type: String,
+        required: true
+    },
+    academicYear: {
+        type: String,
+        required: true
+    },
     tutorName:{
         type: String,
         required: true
@@ -22,6 +30,10 @@ const hodSchema = new mongoose.Schema({
         required: true
     },
     reason: {
+        type: String,
+        required: true
+    },
+    fatherName: {
         type: String,
         required: true
     }

@@ -18,16 +18,15 @@ export async function POST(req) {
         address: process.env.USER,
       },
       to: studentEmail,
-      subject: 'Incharge Request Accepted',
+      subject: 'Tutor Declined Your Request',
       html: `
-        <h2>Incharge Request Accepted</h2>
+        <h2>Tutor Request Accepted</h2>
         <p><strong>Student Name:</strong> ${studentName}</p>
         <p><strong>Register No:</strong> ${studentRegNo}</p>
         <p><strong>Tutor:</strong> ${tutorName}</p>
         <p><strong>Incharge:</strong> ${inchargeName}</p>
-        <p><strong>Reason:</strong> ${reason}</p>
-        <p>This tutor request has been accepted successfully.</p>
-      `,
+        <p><strong>Reason to decline:</strong> ${reason}</p>
+        <p>This request has been declined by tutor.</p>  `,
     };
 
     await transporter.sendMail(mailOptions);

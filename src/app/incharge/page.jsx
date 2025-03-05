@@ -36,12 +36,12 @@ export default function InchargePage() {
     fetchIncharge();
   }, [fetchIncharge]);
 
-  const handleRequest = async (url, method, body, successMessage, failureMessage) => {
+  const handleRequest = async (url, method, payload, successMessage) => {
     try {
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) throw new Error(failureMessage);
@@ -59,11 +59,14 @@ export default function InchargePage() {
       studentName: incharge.studentName,
       studentRegNo: incharge.studentRegNo,
       studentEmail: incharge.studentEmail,
+      year: incharge.year,
+      academicYear: incharge.academicYear,
       tutorName: incharge.tutorName,
-      inchargeName: incharge.yearIncharge,
-      reason: tutor.reason,
+      inchargeName: incharge.inchargeName,
+      reason: incharge.reason,
+      fatherName: incharge.fatherName
     };
-    handleRequest('/api/hod','POST', payload,'Request accepted successfully.','Failed to accept the request.');
+    handleRequest('/api/hod','POST', payload, 'Request accepted successfully.');
     handleRequest('/api/inchargedelete', 'DELETE', { postId: incharge._id }, '');
     handleRequest('/api/sendInchargeEmail', 'POST', {
       ...payload,
@@ -107,14 +110,14 @@ export default function InchargePage() {
               <div className="flex gap-4">
                 <button
                   onClick={() => handleAccept(incharge)}
-                  className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="px-6 py-2 rounded-lg bg-blue-600 cursor-pointer text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 >
                   Accept
                 </button>
 
                 <button
                   onClick={() => handleDecline(incharge)}
-                  className="px-6 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:outline-none"
+                  className="px-6 py-2 rounded-lg bg-red-600 text-white cursor-pointer hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:outline-none"
                 >
                   Decline
                 </button>

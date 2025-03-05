@@ -58,18 +58,19 @@ export default function HodPage() {
   const handleAccept = (hodRequest) => {
     const payload = {
       studentName: hodRequest.studentName,
-      studentRegNo: hodRequest.regNo,
+      studentRegNo: hodRequest.studentRegNo,
       studentEmail: hodRequest.studentEmail,
-      tutorName: hodRequest.tutorName,
+      year: hodRequest.year,
+      academicYear: hodRequest.academicYear,
       inchargeName: hodRequest.inchargeName,
       reason: hodRequest.reason,
+      fatherName: hodRequest.fatherName
     };
-    handleRequest('/api/hod', 'POST', payload, 'Request accepted successfully.', 'Failed to accept the request.');
-    handleRequest('/api/hoddelete', 'DELETE', { postId: hodRequest._id }, '');
     handleRequest('/api/sendHodEmail', 'POST', {
       ...payload,
       studentEmail: hodRequest.studentEmail,
     }, 'Email sent successfully.');
+    handleRequest('/api/hoddelete', 'DELETE', { postId: hodRequest._id }, '');
   };
 
   const handleDecline = (hodRequest) => {

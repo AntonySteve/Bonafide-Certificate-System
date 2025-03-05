@@ -40,7 +40,7 @@ const BonafideLetter = () => {
       });
       const res = await response.json();
       console.log(res);
-      router.push("/Sprogress");
+      router.push("/student");
     } catch (error) {
       console.error("Error sending file:", error);
     }
@@ -49,10 +49,10 @@ const BonafideLetter = () => {
   return (
     <div className="max-w-3xl mx-auto bg-white shadow-lg text-black relative border-4 border-white mt-10">
       {/* Green Top Left Corner */}
-      <div className="absolute top-0 left-0 w-64 h-4 bg-green-600"></div>
+      
 
       <div className="p-8">
-        <div className="flex justify-between items-start mb-5">
+        {/* <div className="flex justify-between items-start mb-5">
           <div className="flex-1 flex justify-center">
             <img
               src="https://psnacet.edu.in/img-1/logo-clr.png"
@@ -65,14 +65,14 @@ const BonafideLetter = () => {
             alt="Founder of PSNACET"
             className="w-30 h-40 "
           />
-        </div>
+        </div> */}
         <h2 className="text-2xl font-bold text-center mb-4">Bonafide Certificate</h2>
         <h2 className="text-center font-semibold mb-5 mt-5 text-xl">
           To whomsoever it may concern
         </h2>
 
         <p>
-          This is to certify that <strong>Mr./Ms. {formData.studentName}</strong> (Register No: <strong>{formData.regNo}</strong>)  S/O or D/O of
+          This is to certify that <strong>Mr./Ms. {formData.studentName}</strong> (Register No: <strong>{formData.studentRegNo}</strong>)  S/O or D/O of
           <strong> {father.fatherName} </strong> is a student of our
           college, studying in <strong>{formData.year} B.E.</strong> Degree in
           <strong> {formData.department} </strong> during the academic year
@@ -83,8 +83,6 @@ const BonafideLetter = () => {
           This Certificate is issued to him/her for applying to the
           <strong> {formData.reason}</strong>.
         </p>
-
-        <p className="mt-6 text-right font-bold mr-5">HOD-CSE</p>
       </div>
 
       <button
