@@ -13,6 +13,7 @@ export default function InchargePage() {
   const [error, setError] = useState(null);
   const [declineReason, setDeclineReason] = useState({});
   const [showReasonInput, setShowReasonInput] = useState(null);
+  const [processing, setProcessing] = useState({});
 
   const fetchIncharge = useCallback(async () => {
     if (!user?.email) return;
@@ -41,7 +42,9 @@ export default function InchargePage() {
     fetchIncharge();
   }, [fetchIncharge]);
 
-  const handleRequest = async (url, method, payload, successMessage) => {
+  const handleRequest = async (url, method, payload, successMessage, inchargeId) => {
+    setProcessing((prev) => ({ ...prev, [inchargeId]: true }));
+
     try {
       const response = await fetch(url, {
         method,
@@ -58,6 +61,8 @@ export default function InchargePage() {
     } catch (error) {
       console.error('Error processing request:', error);
       toast.error('An error occurred. Please try again later.');
+    } finally {
+      setProcessing((prev) => ({ ...prev, [inchargeId]: false }));
     }
   };
 
@@ -74,9 +79,9 @@ export default function InchargePage() {
       fatherName: incharge.fatherName,
     };
 
-    handleRequest('/api/hod', 'POST', payload, 'Request accepted successfully.');
-    handleRequest('/api/inchargedelete', 'DELETE', { postId: incharge._id }, '');
-    handleRequest('/api/sendInchargeEmail', 'POST', payload, 'Email sent successfully.');
+    handleRequest('/api/hod', 'POST', payload, 'Request accepted successfully.', incharge._id);
+    handleRequest('/api/inchargedelete', 'DELETE', { postId: incharge._id }, '', incharge._id);
+    handleRequest('/api/sendInchargeEmail', 'POST', payload, 'Email sent successfully.', incharge._id);
   };
 
   const handleDecline = (incharge) => {
@@ -98,8 +103,8 @@ export default function InchargePage() {
       fatherName: incharge.fatherName
     };
 
-    handleRequest('/api/inchargedelete', 'DELETE', { postId: incharge._id }, 'Request declined successfully.');
-    handleRequest('/api/sendInchargeDeclineEmail', 'POST', payload, 'Decline email sent successfully.');
+    handleRequest('/api/inchargedelete', 'DELETE', { postId: incharge._id }, 'Request declined successfully.', incharge._id);
+    handleRequest('/api/sendInchargeDeclineEmail', 'POST', payload, 'Decline email sent successfully.', incharge._id);
     setShowReasonInput(null);
   };
 
@@ -117,7 +122,7 @@ export default function InchargePage() {
           {incharges.map((incharge) => (
             <div
               key={incharge._id}
-              className="bg-white shadow-lg rounded-xl p-8 flex justify-between items-start transition-transform transform hover:scale-105"
+              className="bg-white shadow-lg rounded-xl p-8 flex justify-between items-start transition-transform transform hover:scale-102"
             >
               <div>
                 <h2 className="text-xl font-medium text-gray-900">{incharge.studentName}</h2>
@@ -129,9 +134,10 @@ export default function InchargePage() {
               <div className="flex gap-4">
                 <button
                   onClick={() => handleAccept(incharge)}
+                  disabled={processing[incharge._id]}
                   className="px-6 py-2 rounded-lg bg-blue-600 cursor-pointer text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 >
-                  Accept
+                  {processing[incharge._id] ? 'Processing...' : 'Accept'}
                 </button>
 
                 <button

@@ -13,6 +13,7 @@ export default function TutorPage() {
   const [error, setError] = useState(null);
   const [declineReason, setDeclineReason] = useState({});
   const [showReasonInput, setShowReasonInput] = useState(null);
+  const [processing, setProcessing] = useState({});
 
   const fetchTutors = useCallback(async () => {
     if (!user?.email) return;
@@ -37,7 +38,8 @@ export default function TutorPage() {
     fetchTutors();
   }, [fetchTutors]);
 
-  const handleRequest = async (url, method, payload, successMessage) => {
+  const handleRequest = async (url, method, payload, successMessage, tutorId) => {
+    setProcessing((prev) => ({ ...prev, [tutorId]: true }));
     try {
       const response = await fetch(url, {
         method,
@@ -55,6 +57,8 @@ export default function TutorPage() {
     } catch (error) {
       console.error('Error processing request:', error);
       toast.error(error.message || 'An error occurred. Please try again later.');
+    } finally {
+      setProcessing((prev) => ({ ...prev, [tutorId]: false }));
     }
   };
 
@@ -69,12 +73,12 @@ export default function TutorPage() {
       inchargeName: tutor.yearIncharge,
       inchargeEmail: tutor.inchargeEmail,
       reason: tutor.reason,
-      fatherName: tutor.fatherName
+      fatherName: tutor.fatherName,
     };
 
-    handleRequest('/api/incharge', 'POST', payload, 'Tutor request accepted successfully.');
-    handleRequest('/api/tutordelete', 'DELETE', { postid: tutor._id }, 'Request removed.');
-    handleRequest('/api/sendTutorEmail', 'POST', payload, 'Email sent successfully.');
+    handleRequest('/api/incharge', 'POST', payload, 'Tutor request accepted successfully.', tutor._id);
+    handleRequest('/api/tutordelete', 'DELETE', { postid: tutor._id }, 'Request removed.', tutor._id);
+    handleRequest('/api/sendTutorEmail', 'POST', payload, 'Email sent successfully.', tutor._id);
   };
 
   const handleDecline = (tutor) => {
@@ -93,19 +97,19 @@ export default function TutorPage() {
       inchargeName: tutor.yearIncharge,
       inchargeEmail: tutor.inchargeEmail,
       reason: declineReason[tutor._id],
-      fatherName: tutor.fatherName
+      fatherName: tutor.fatherName,
     };
 
-    handleRequest('/api/tutordelete', 'DELETE', { postid: tutor._id }, 'Tutor request declined successfully.');
-    handleRequest('/api/sendTutorDeclineEmail', 'POST', payload, 'Decline email sent successfully.');
+    handleRequest('/api/tutordelete', 'DELETE', { postid: tutor._id }, 'Tutor request declined successfully.', tutor._id);
+    handleRequest('/api/sendTutorDeclineEmail', 'POST', payload, 'Decline email sent successfully.', tutor._id);
     setShowReasonInput(null);
   };
 
-  if (loading) return <Loader className="flex justify-center items-center"/>;
+  if (loading) return <Loader className="flex justify-center items-center" />;
 
   return (
-    <div className="container mx-auto p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">Tutor Requests</h1>
+    <div className="min-h-screen bg-gray-100 py-12 px-6">
+      <h1 className="text-3xl font-semibold text-gray-700 mb-8 text-center">Tutor Requests</h1>
 
       {error && (
         <div className="mb-4 p-4 bg-red-100 text-red-800 rounded-lg shadow">
@@ -125,7 +129,7 @@ export default function TutorPage() {
         tutors.map((tutor) => (
           <div
             key={tutor._id}
-            className="flex flex-col bg-white rounded-lg shadow-lg p-6 mb-6"
+            className="bg-white mt-8 shadow-lg rounded-xl p-8 flex justify-between items-start transition-transform transform hover:scale-102"
           >
             <p className="text-lg text-gray-800"><strong>Name:</strong> {tutor.studentName}</p>
             <p className="text-lg text-gray-800"><strong>Register No:</strong> {tutor.studentRegNo}</p>
@@ -134,9 +138,10 @@ export default function TutorPage() {
             <div className="flex gap-4 mt-4">
               <button
                 onClick={() => handleAccept(tutor)}
+                disabled={processing[tutor._id]}
                 className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-200"
               >
-                Accept
+                {processing[tutor._id] ? 'Processing...' : 'Accept'}
               </button>
               <button
                 onClick={() => setShowReasonInput(tutor._id)}

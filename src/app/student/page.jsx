@@ -2,8 +2,9 @@
 
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import Loader from "@/components/ui/loader";
+import toast from "react-hot-toast";
 
 export default function Page() {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function Page() {
   const [formData, setFormData] = useState({
     studentName: "",
     studentRegNo: "",
-    studentEmail: user?.email,
+    studentEmail: user?.email || "",
     father: "",
     tutor: "",
     tutorEmail: "",
@@ -23,6 +24,8 @@ export default function Page() {
     academicYear: "",
     reason: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   const tutorData = {
     "Tutor A": "tutora@psnacet.edu.in",
@@ -45,7 +48,7 @@ export default function Page() {
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    
+
     setFormData((prev) => {
       const updatedData = {
         ...prev,
@@ -57,41 +60,25 @@ export default function Page() {
       if (name === "yearIncharge") {
         updatedData.inchargeEmail = inchargeData[value] || "";
       }
-      console.log(updatedData); 
       return updatedData;
     });
   }, []);
 
-  //if(loading) return <Loader className="flex items-center justify-center"/>
-  
-  /*const sendFile = async () => {
-    try {
-      const response = await fetch("/api/send-file", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      const res = await response.json();
-      console.log(res);
-      router.push("/Sprogress");
-    } catch (error) {
-      console.error("Error sending file:", error);
-    }
-  };*/
-
   const handleNext = (e) => {
     e.preventDefault();
-    if(!user)
-    {
-      router.push('/login');
+    if (!user) {
+      router.push("/login");
+      return;
     }
+
+    setLoading(true);
+
+    toast.success("Request is sent");
+
     const queryString = new URLSearchParams(formData).toString();
     router.push(`/letter?${queryString}`);
   };
-  
-  
+
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-lg text-black flex-col">
       <h2 className="text-4xl font-bold mb-8 text-center text-blue-700">Bonafide Certificate Form</h2>
@@ -119,12 +106,7 @@ export default function Page() {
           </div>
         ))}
 
-        {[
-          ["tutor", tutors],
-          ["year", yearOption],
-          ["section", sectionOption],
-          ["yearIncharge", yearIncharges],
-        ].map(([name, options]) => (
+        {["tutor", "year", "section", "yearIncharge"].map((name) => (
           <div key={name}>
             <label htmlFor={name} className="block mb-2 font-medium">
               {name.charAt(0).toUpperCase() + name.slice(1)}
@@ -138,7 +120,7 @@ export default function Page() {
               required
             >
               <option value="">Select {name.charAt(0).toUpperCase() + name.slice(1)}</option>
-              {options.map((option) => (
+              {(name === "tutor" ? tutors : name === "yearIncharge" ? yearIncharges : name === "year" ? yearOption : sectionOption).map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>
@@ -163,14 +145,11 @@ export default function Page() {
         </div>
 
         <button
-<<<<<<< HEAD
-          onClick={handleNext}
-=======
           type="submit"
->>>>>>> e42b5ca4977371469cdb153dd324e7c562c0c33a
-          className="bg-blue-600  text-white p-3 rounded-lg hover:bg-blue-800 w-full cursor-pointer transition-all duration-300"
+          className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-800 w-full cursor-pointer transition-all duration-300"
+          disabled={loading}
         >
-          Next
+          {loading ? <Loader /> : "Next"}
         </button>
       </form>
     </div>
