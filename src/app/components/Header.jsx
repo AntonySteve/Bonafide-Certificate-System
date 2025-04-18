@@ -21,7 +21,7 @@ export default function Header() {
       {/* College Logo & Name (Top of the Page) */}
       <div className="absolute top-8 flex flex-col items-center">
         <img
-          src="https://psnacet.edu.in/images/logo-white.png"// Change this to your logo's path
+          src="https://www.psnacet.edu.in/images/logo-clr.png"// Change this to your logo's path
           alt="College Logo"
           className="w-50 h-50 md:w-150 md:h-40 mb-100"
         />

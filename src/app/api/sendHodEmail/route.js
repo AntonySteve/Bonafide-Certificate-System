@@ -15,67 +15,78 @@ export async function POST(req) {
     } = await req.json();
 
     // Canvas dimensions (A4 size ratio)
-    const width = 595 * 2; // Scale up for better resolution
-    const height = 842 * 2;
+    const width = 1200;
+    const height = 1600;
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext('2d');
 
-    // Load images (College Logo & Signature)
+    // Load images (College Logo & Founder Image)
     const logo = await loadImage('https://psnacet.edu.in/img-1/logo-clr.png');
-    const signature = await loadImage('kothandaraman.jpeg');
+    const founderImage = await loadImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRw1cQVTCVyBqY0d5c3OITBi82aKDDn6WWHxuVBfMk20GMt0U6SGcqWEfZJdEgaZfG2Nw&usqp=CAU');
 
     // Background color
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, width, height);
 
-    // **Top Green Line**
-    ctx.fillStyle = '#07bc49'; // Green color
-    ctx.fillRect(0, 34, width / 2, 34); // Adjusted to match your UI
+    // Green Line (Top-Left to Center)
+    ctx.fillStyle = '#16A34A';
+    ctx.fillRect(0, 5, width / 2, 20); // Starts from left, extends to center
 
-    // **Header (Logo & Signature)**
-    ctx.drawImage(logo, 26, 130, 291, 99); // Logo at top-left
-    ctx.drawImage(signature, width - 160, 130, 124, 99); // Signature at top-right
+    // Logo & Founder Image (Top-Right)
+    const logoWidth = 150, logoHeight = 150;
+    const founderWidth = 150, founderHeight = 180;
+    const marginTop = 5;
+    const logoX = width - (logoWidth + founderWidth + 20); // Right-aligned
+    const founderX = width - (founderWidth + 10); // Next to logo
 
-    // **Title: Bonafide Certificate**
-    ctx.fillStyle = '#000000';
-    ctx.font = 'bold 40px Arial';
+    ctx.drawImage(logo, logoX, marginTop, logoWidth, logoHeight);
+    ctx.drawImage(founderImage, founderX, marginTop, founderWidth, founderHeight);
+
+    // College Name (Centered)
+    ctx.fillStyle = '#003366';
+    ctx.font = 'bold 54px Georgia';
     ctx.textAlign = 'center';
-    ctx.fillText('Bonafide Certificate', width / 2, 400);
+    ctx.fillText('PSNA College of Engineering and Technology', width / 2, 350);
 
-    // **Subtitle**
-    ctx.font = 'italic 24px Arial';
-    ctx.fillText('To Whomsoever It May Concern', width / 2, 460);
+    // Certificate Title (Centered)
+    ctx.fillStyle = '#000000';
+    ctx.font = 'bold 48px Times New Roman';
+    ctx.fillText('Bonafide Certificate', width / 2, 450);
 
-    // **Certificate Content**
+    // Subtitle (Centered)
+    ctx.font = 'italic 32px Times New Roman';
+    ctx.fillText('To Whomsoever It May Concern', width / 2, 520);
+
+    // Certificate Content (Centered)
     ctx.fillStyle = '#222222';
-    ctx.font = '22px Arial';
-    ctx.textAlign = 'left';
-    const textX = 50;
-    let textY = 520;
+    ctx.font = '28px Times New Roman';
 
-    const content = `This is to certify that Mr./Ms. ${studentName} (Reg No: ${studentRegNo}),
-S/o or D/o of ${fatherName}, is a student of our institution,
-currently enrolled in the BE. Computer Science Engineering during
-the academic year ${academicYear}.`;
+    const content = `
+      This is to certify that Mr./Ms. ${studentName} (Reg No: ${studentRegNo}),
+      S/o or D/o of ${fatherName}, is a student of our institution,
+      currently enrolled in the BE. Computer Science Engineering
+      during the academic year ${academicYear}.
+    `;
 
-    // Split text into multiple lines for better readability
-    const lines = content.split('\n');
+    const lines = content.trim().split('\n');
+    let yPosition = 620;
+
     lines.forEach((line) => {
-      ctx.fillText(line.trim(), textX, textY);
-      textY += 40;
+      ctx.fillText(line.trim(), width / 2, yPosition);
+      yPosition += 60;
     });
 
-    // **Reason for Certificate**
-    ctx.font = '22px Arial';
-    ctx.fillText(`This Certificate is issued for the purpose of: ${reason}`, textX, textY + 50);
+    // Reason for certificate (Centered)
+    ctx.font = '28px Times New Roman';
+    ctx.fillText(`This Certificate is issued for the purpose of: ${reason}`, width / 2, yPosition + 40);
 
-    // **Signature**
-    ctx.font = 'bold 28px Arial';
-    ctx.fillText('HOD-CSE', width - 200, height - 150);
+    // Signature & Footer (Centered)
+    ctx.font = 'bold 32px Times New Roman';
+    ctx.fillText('HOD-CSE', width / 2, height - 120);
 
-    // **Bottom Green Line (Moved Slightly Up)**
-    ctx.fillStyle = '#07bc49';
-    ctx.fillRect(width / 2, height - 80, width / 2, 20);
+    // Bottom Green Line (Center to Right)
+    ctx.fillStyle = '#16A34A';
+    ctx.fillRect(width / 2, height - 20, width / 2, 20);
 
     // Save the image to a temporary path
     const imagePath = path.join('/tmp', 'bonafide_certificate.png');
@@ -95,7 +106,7 @@ the academic year ${academicYear}.`;
     const mailOptions = {
       from: `Bonafide Certificate <${process.env.USER}>`,
       to: studentEmail,
-      subject: 'Your Bonafide Certificate',
+      subject: 'Your Request is accepted by HOD',
       text: `Dear ${studentName},\n\nPlease find your Bonafide Certificate attached.\n\nBest regards,\nPSNA College of Engineering and Technology`,
       attachments: [
         {
@@ -105,7 +116,6 @@ the academic year ${academicYear}.`;
       ],
     };
 
-    // Send the email
     await transporter.sendMail(mailOptions);
 
     return new Response(JSON.stringify({ message: 'Email sent successfully!' }), { status: 200 });
