@@ -15,7 +15,7 @@ export async function GET(req) {
         headers: { "Content-Type": "application/json" },
       });
     }
-
+    
     console.log("Fetching tutors for email:", email);
     const incharges = await Incharge.find({ inchargeEmail: email });
     return new Response(JSON.stringify({ incharges }), {

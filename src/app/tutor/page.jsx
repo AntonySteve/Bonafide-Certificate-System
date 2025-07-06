@@ -82,27 +82,19 @@ function RequestCard({
 export default function TutorPage() {
   const user = useSelector((state) => state.user);
 
-  // Separate loading & error states
   const [loadingTutors, setLoadingTutors] = useState(false);
   const [loadingRequests, setLoadingRequests] = useState(false);
   const [errorTutors, setErrorTutors] = useState(null);
   const [errorRequests, setErrorRequests] = useState(null);
-
   const [tutors, setTutors] = useState([]);
   const [tutorAccepted, setTutorAccepted] = useState([]);
   const [tutorRejected, setTutorRejected] = useState([]);
-
-  // Decline reasons & UI state
   const [declineReason, setDeclineReason] = useState({});
   const [declineError, setDeclineError] = useState({});
   const [showReasonInput, setShowReasonInput] = useState(null);
-
-  // Tracks in-flight requests per tutor ID
   const [processing, setProcessing] = useState({});
-
   const [activeTab, setActiveTab] = useState('all');
 
-  // Utility fetch wrappers
   const fetchJSON = async (url, options) => {
     const res = await fetch(url, options);
     const data = await res.json();
@@ -110,7 +102,6 @@ export default function TutorPage() {
     return data;
   };
 
-  // Fetch all tutor requests
   const fetchTutors = useCallback(async () => {
     if (!user?.email) return;
     setLoadingTutors(true);
@@ -128,7 +119,6 @@ export default function TutorPage() {
     }
   }, [user?.email]);
 
-  // Fetch accepted/rejected state
   const fetchRequests = useCallback(async () => {
     if (!user?.email) return;
     setLoadingRequests(true);
@@ -153,13 +143,11 @@ export default function TutorPage() {
     fetchRequests();
   }, [fetchTutors, fetchRequests]);
 
-
   const refetchAll = () => {
     fetchTutors();
     fetchRequests();
   };
 
-  // Handler for accepting
   const handleAccept = async (tutor) => {
     const id = tutor._id;
     const payload = {
@@ -177,7 +165,6 @@ export default function TutorPage() {
 
     setProcessing((p) => ({ ...p, [id]: true }));
     try {
-      // Chain calls in order
       await fetchJSON(
         `/api/acceptedRequest?email=${encodeURIComponent(user.email)}`,
         { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) }
@@ -185,7 +172,7 @@ export default function TutorPage() {
       await fetchJSON('/api/incharge', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
       await fetchJSON('/api/tutordelete', { method: 'DELETE', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ postid: id }) });
       await fetchJSON('/api/sendTutorEmail', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-
+      
       toast.success('Tutor request accepted successfully.');
       refetchAll();
     } catch (err) {
@@ -274,7 +261,6 @@ export default function TutorPage() {
         </ul>
       </div>
 
-      {/* Main Content */}
       <div className="w-4/5 p-6">
         <h1 className="text-3xl font-semibold text-gray-700 mb-8 text-center">
           {activeTab === 'all'

@@ -9,6 +9,7 @@ const BonafideLetter = () => {
   const router = useRouter();
   const letterRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const formData = {
     studentName: searchParams.get("studentName"),
@@ -23,6 +24,7 @@ const BonafideLetter = () => {
     inchargeEmail: searchParams.get("inchargeEmail"),
     academicYear: searchParams.get("academicYear"),
     fatherName: searchParams.get("father"),
+    department: searchParams.get("department"),
   };
 
   const sendFile = async () => {
@@ -35,9 +37,15 @@ const BonafideLetter = () => {
         },
         body: JSON.stringify(formData),
       });
+
       const res = await response.json();
       console.log(res);
-      router.push("/student");
+
+      setShowPopup(true);
+      setTimeout(() => {
+        setShowPopup(false);
+        router.push("/student");
+      }, 2000);
     } catch (error) {
       console.error("Error sending file:", error);
     } finally {
@@ -46,34 +54,42 @@ const BonafideLetter = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-white shadow-lg text-black relative border-4 border-white mt-10">
-      <div className="p-8">
-        <h2 className="text-2xl font-bold text-center mb-4">Bonafide Certificate</h2>
-        <h2 className="text-center font-semibold mb-5 mt-5 text-xl">
-          To whomsoever it may concern
-        </h2>
+    <div className="relative">
+      {showPopup && (
+        <div className="fixed top-6 right-6 bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg z-50 transition-all duration-300">
+          ✅ Bonafide Certificate sent successfully!
+        </div>
+      )}
 
-        <p>
-          This is to certify that <strong>Mr./Ms. {formData.studentName}</strong> (Register No: <strong>{formData.studentRegNo}</strong>)  S/O or D/O of
-          <strong> {formData.fatherName} </strong> is a student of our
-          college, studying in <strong>{formData.year} B.E.</strong> Degree in
-          <strong> {formData.department} </strong> during the academic year
-          <strong> {formData.academicYear}</strong>.
-        </p>
+      <div className="max-w-3xl mx-auto bg-white shadow-lg text-black relative border-4 border-white mt-10">
+        <div className="p-8">
+          <h2 className="text-2xl font-bold text-center mb-4">Bonafide Certificate</h2>
+          <h2 className="text-center font-semibold mb-5 mt-5 text-xl">
+            To whomsoever it may concern
+          </h2>
 
-        <p className="mt-4">
-          This Certificate is issued to him/her for applying to the
-          <strong> {formData.reason}</strong>.
-        </p>
+          <p>
+            This is to certify that <strong>Mr./Ms. {formData.studentName}</strong> (Register No: <strong>{formData.studentRegNo}</strong>) S/O or D/O of
+            <strong> {formData.fatherName} </strong> is a student of our
+            college, studying in <strong>{formData.year} B.E.</strong> Degree in
+            <strong> {formData.department} </strong> during the academic year
+            <strong> {formData.academicYear}</strong>.
+          </p>
+
+          <p className="mt-4">
+            This Certificate is issued to him/her for applying to the
+            <strong> {formData.reason}</strong>.
+          </p>
+
+          <button
+            onClick={sendFile}
+            className={`bg-green-600 text-white p-3 rounded-lg hover:bg-green-800 w-30 mt-4 cursor-pointer ${isLoading ? 'opacity-70' : ''}`}
+            disabled={isLoading}
+          >
+            {isLoading ? "Sending..." : "Send"}
+          </button>
+        </div>
       </div>
-
-      <button
-        onClick={sendFile}
-        className={`bg-green-600 text-white p-3 rounded-lg hover:bg-green-800 w-30 mt-4 cursor-pointer ${isLoading ? 'opacity-70' : ''}`}
-        disabled={isLoading}
-      >
-        {isLoading ? "Sending..." : "Send"}
-      </button>
     </div>
   );
 };

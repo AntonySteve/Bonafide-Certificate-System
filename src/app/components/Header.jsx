@@ -17,11 +17,9 @@ export default function Header() {
   style={{ backgroundImage: "url('Desktop - 2-fotor.png')", backgroundSize: "cover", backgroundPosition: "center",filter:"brightness(1.0) contrast(0.8)" }} // Background Image
   >
   
-
-      {/* College Logo & Name (Top of the Page) */}
       <div className="absolute top-8 flex flex-col items-center">
         <img
-          src="https://www.psnacet.edu.in/images/logo-clr.png"// Change this to your logo's path
+          src="https://www.psnacet.edu.in/images/logo-clr.png"
           alt="College Logo"
           className="w-50 h-50 md:w-150 md:h-40 mb-100"
         />
@@ -34,7 +32,6 @@ export default function Header() {
         </motion.h2>
       </div>
 
-      {/* Main Content (Heading & Login Button) */}
       <header className="w-full max-w-lg text-center">
         <motion.h1
           className="text-4xl font-bold text-white mb-6"
@@ -51,7 +48,7 @@ export default function Header() {
           whileHover={{ scale: 1.0 }}
           whileTap={{ scale: 0.9 }}
         >
-          Login
+          Login                     
         </motion.button>
       </header>
     </div>

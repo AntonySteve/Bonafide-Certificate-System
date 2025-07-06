@@ -7,30 +7,34 @@ export async function POST(req) {
   await connectDB();
 
   try {
-    const { email, password } = await req.json(); // Parse request body
+    const { email, password } = await req.json(); 
 
-    // Check if the user exists
+    if (!email || !password) {
+      return new Response(
+        JSON.stringify({ message: "Email and password are required" }),
+        { status: 400 }
+      );
+    }
+
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
-      return new Response(JSON.stringify({ message: "Invalid email or password" }), {
+      return new Response(JSON.stringify({ message: "User not registered" }), {
         status: 401,
       });
     }
 
-    // Verify the password
     const isPasswordValid = await bcrypt.compare(password, existingUser.password);
     if (!isPasswordValid) {
-      return new Response(JSON.stringify({ message: "Invalid email or password" }), {
+      return new Response(JSON.stringify({ message: "Password is incorrect" }), {
         status: 401,
       });
     }
-
-    // Create a JWT token (for authentication)
     const token = jwt.sign(
       { id: existingUser._id, email: existingUser.email },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" } // Token valid for 7 days
+      { expiresIn: "7d" } 
     );
+
 
     return new Response(
       JSON.stringify({

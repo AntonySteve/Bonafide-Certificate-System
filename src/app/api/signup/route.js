@@ -9,7 +9,13 @@ export async function POST(req) {
   try {
     const { username, email, password } = await req.json(); // Parse request body
 
-    // Check if user already exists
+    if(!username || !email || !password) {
+      return new Response(
+        JSON.stringify({ message: "Username, email, and password are required" }),
+        { status: 400 }
+      );
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return new Response(JSON.stringify({ message: "User already exists" }), {
@@ -17,18 +23,15 @@ export async function POST(req) {
       });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user
     const newUser = await User.create({ username, email, password: hashedPassword });
     await newUser.save();
 
-    // Generate JWT token
     const token = jwt.sign(
       { id: newUser._id, email: newUser.email },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" } // Token valid for 7 days
+      { expiresIn: "7d" } 
     );
 
     return new Response(

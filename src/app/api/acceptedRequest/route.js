@@ -33,7 +33,6 @@ export async function POST(req) {
       });
     }
 
-    // Add accepted request
     user.acceptedRequests.push({
       studentName,
       studentRegNo,

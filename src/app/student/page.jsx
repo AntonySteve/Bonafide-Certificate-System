@@ -45,6 +45,7 @@ export default function Page() {
   const yearIncharges = Object.keys(inchargeData);
   const yearOption = ["I year", "II year", "III year", "IV year"];
   const sectionOption = ["A", "B", "C", "D"];
+  const academicYear = ["2022-2026", "2023-2027", "2024-2028", "2025-2029"];
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -80,7 +81,8 @@ export default function Page() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-lg text-black flex-col">
+    <div className="bg-blue-200">
+    <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-lg text-black flex-col ">
       <h2 className="text-4xl font-bold mb-8 text-center text-blue-700">Bonafide Certificate Form</h2>
 
       <form className="space-y-6" onSubmit={handleNext}>
@@ -88,7 +90,6 @@ export default function Page() {
           studentName: "Student Name",
           studentRegNo: "Registration Number",
           father: "Father's Name",
-          academicYear: "Academic Year",
         }).map(([name, placeholder]) => (
           <div key={name}>
             <label htmlFor={name} className="block mb-2 font-medium">
@@ -106,7 +107,7 @@ export default function Page() {
           </div>
         ))}
 
-        {["tutor", "year", "section", "yearIncharge"].map((name) => (
+        {["academicYear", "tutor", "year", "section", "yearIncharge"].map((name) => (
           <div key={name}>
             <label htmlFor={name} className="block mb-2 font-medium">
               {name.charAt(0).toUpperCase() + name.slice(1)}
@@ -120,7 +121,7 @@ export default function Page() {
               required
             >
               <option value="">Select {name.charAt(0).toUpperCase() + name.slice(1)}</option>
-              {(name === "tutor" ? tutors : name === "yearIncharge" ? yearIncharges : name === "year" ? yearOption : sectionOption).map((option) => (
+              {(name === "academicYear" ? academicYear : name === "tutor" ? tutors : name === "yearIncharge" ? yearIncharges : name === "year" ? yearOption : sectionOption).map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>
@@ -152,6 +153,7 @@ export default function Page() {
           {loading ? <Loader /> : "Next"}
         </button>
       </form>
+    </div>
     </div>
   );
 }

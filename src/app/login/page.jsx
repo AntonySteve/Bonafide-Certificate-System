@@ -19,8 +19,8 @@ export default function Login() {
       'year1@psnacet.edu.in',
       'year2@psnacet.edu.in',
       'year3@psnacet.edu.in',
-      'year4@psnacet.edu.in',
-    ],
+      'year4@psnacet.edu.in',                   
+    ],                                          
     tutors: [
       'tutora@psnacet.edu.in',
       'tutorb@psnacet.edu.in',
@@ -63,17 +63,11 @@ export default function Login() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-
-      if (!response.ok) {
-        throw new Error('Invalid credentials. Please try again.');
-      }
-
       const result = await response.json();
-
-      if (!result.user) {
-        throw new Error('User not found. Please check your credentials.');
+      if (!response.ok) {
+        throw new Error(result.message);
       }
-
+      setLoading(false);
       dispatch(setUser(result.user));
       handleNavigation(result.user.email);
     } catch (err) {
@@ -89,7 +83,7 @@ export default function Login() {
         {/* Logo */}
         <div className="flex justify-center mb-6">
           <img
-            src="https://www.wemakescholars.com/admin/uploads/providers/dXALXBZDSIJRjYu-lFo5oZXxQRcmrfw9.webp"
+            src="https://tse3.mm.bing.net/th/id/OIP.taQ0TK0ptqzVYC2--aQFigHaG6?cb=thvnextc1&rs=1&pid=ImgDetMain&o=7&rm=3"
             alt="Logo"
             className="w-40 h-40"
           />
@@ -129,10 +123,8 @@ export default function Login() {
           />
         </div>
 
-        {/* Error Message */}
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
-        {/* Sign In Button */}
         <button
           type="submit"
           className={`w-full p-2 rounded text-white ${loading ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'} cursor-pointer transition duration-200`}
