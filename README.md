@@ -1,36 +1,157 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 📄 eBonafide Certificate System
 
-## Getting Started
+A full-stack web application designed to digitize and automate the bonafide certificate request and approval process within educational institutions.
 
-First, run the development server:
+This system replaces manual paperwork with a structured, role-based digital workflow.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📌 Problem Statement
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+In many institutions, bonafide certificate requests are processed manually, leading to:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Delays in approval
+- Lack of tracking transparency
+- Paper-based inefficiencies
+- Manual verification workload
+- No centralized record system
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Solution
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The eBonafide Certificate System introduces:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Online certificate application submission
+- Hierarchical approval workflow
+- Role-based authentication
+- Real-time application tracking
+- Automated PDF certificate generation
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 👥 User Roles
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Student**
+   - Apply for bonafide certificate
+   - Track application status
+   - Download approved certificate (PDF)
+
+2. **Tutor**
+   - Review and approve/reject student requests
+
+3. **Year In-Charge**
+   - Secondary approval layer
+
+4. **Head of Department (HoD)**
+   - Final approval authority
+   - Manage staff access
+
+---
+
+## 🔁 Workflow Process
+
+Student → Tutor → Year In-Charge → HoD → Certificate Generated
+
+Each level verifies and forwards the request based on institutional hierarchy.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- React.js / Next.js
+- HTML5
+- CSS3
+- Axios
+
+### Backend
+- Node.js
+- Express.js
+- REST APIs
+- JWT Authentication
+
+### Database
+- MongoDB
+
+### Other Tools
+- PDF Generation Library
+- Role-Based Access Control (RBAC)
+- Git & GitHub
+
+---
+
+## 🔐 Key Features
+
+- JWT-based authentication
+- Middleware-driven role-based authorization
+- Secure API routes
+- Dynamic approval state management
+- PDF generation upon final approval
+- Admin capability to add/remove staff members
+
+---
+
+## 🏗️ System Architecture (High-Level)
+Client (Frontend)
+↓
+REST API Layer (Express)
+↓
+Business Logic Layer
+↓
+MongoDB Database
+
+---
+
+## 📊 What I Learned
+
+Designing hierarchical approval workflows
+
+Implementing role-based authentication
+
+Managing secure backend APIs
+
+Generating dynamic PDF documents
+
+Handling end-to-end system lifecycle
+
+Structuring scalable full-stack architecture
+
+---
+
+## ⚡ Limitations
+
+Limited to single institution setup
+
+No email notification system (if not implemented)
+
+No analytics dashboard
+
+No cloud storage integration
+
+---
+
+## 🔮 Future Improvements
+
+Admin analytics dashboard
+
+Multi-department scalability
+
+Cloud-based document storage
+
+Audit logs for approvals
+
+---
+
+## 🌍 Live Demo
+https://e-bonafide-certificate.vercel.app/
+
+---
+
+## 👨‍💻 Author
+
+Antony Steve
+Karthik Raja 
+Arikara Sudhan 
+GitHub: https://github.com/AntonySteve
+LinkedIn: https://linkedin.com/in/antony-steve
