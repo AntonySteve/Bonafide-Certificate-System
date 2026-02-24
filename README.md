@@ -153,5 +153,5 @@ https://e-bonafide-certificate.vercel.app/
  - Antony Steve
  - Karthik Raja 
  - Arikara Sudhan 
- [GitHub](https://github.com/AntonySteve)
- [LinkedIn](https://linkedin.com/in/antony-steve)
+ - [GitHub](https://github.com/AntonySteve)
+ - [LinkedIn](https://linkedin.com/in/antony-steve)
