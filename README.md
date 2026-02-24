@@ -143,6 +143,11 @@ Audit logs for approvals
 
 ---
 
+## Screenshots
+<img width="1920" height="917" alt="image" src="https://github.com/user-attachments/assets/95f97182-5ad1-4587-98f1-ffa783c85ece" />
+<img width="1899" height="916" alt="image" src="https://github.com/user-attachments/assets/a628a7d9-a275-48bc-9512-044dd48570a2" />
+
+
 ## 🌍 Live Demo
 https://e-bonafide-certificate.vercel.app/
 
